@@ -4,6 +4,6 @@
 #include "types.h"
 
 namespace Ecifricas {
-	void initializeBoard(std::string fen);
+	void setBoard(std::string fen);
 	void printBoard();
 }

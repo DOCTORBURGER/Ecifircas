@@ -14,7 +14,7 @@ namespace Ecifricas {
     // - could be a square like e3, and is an en passant target square (can only be one because en passant only last for 1 turn)
     // 0 is halfmove clock, used for 50 move rule counting
     // 1 is full move clock, starts at one and is incremented after blacks move
-    void initializeBoard(std::string fen) {
+    void setBoard(std::string fen) {
         int rank = 8;
         int file = 1;
 

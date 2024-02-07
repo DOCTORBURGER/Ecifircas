@@ -9,8 +9,7 @@ int main()
     std::string inputLine;
     bool running = true;
 
-    initializeBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
-    printBoard();
+    setBoard("r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1");
     while (running) {
         if (!std::getline(std::cin, inputLine)) {
             break; 
@@ -28,8 +27,11 @@ int main()
         else if (inputLine == "quit") {
             running = false;
         }
+        else if (inputLine == "d") {
+            printBoard();
+        }
         else {
-            
+
         }
     }
 
