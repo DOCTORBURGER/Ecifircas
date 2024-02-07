@@ -2,109 +2,81 @@
 #include <cstdint>
 #include <string>
 #include "board.h"
+#include "types.h"
 
-unsigned long long whitePawns;
+namespace Ecifricas {
+    Bitboard Pieces[2][6];
 
-unsigned long long blackPawns;
+    // Starting position FEN: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+    // letters stand for pieces, numbers is blank squares, and / means a new rank
+    // w or b stands for white or black to move
+    // KQkq is keeping track of castling
+    // - could be a square like e3, and is an en passant target square (can only be one because en passant only last for 1 turn)
+    // 0 is halfmove clock, used for 50 move rule counting
+    // 1 is full move clock, starts at one and is incremented after blacks move
+    void initializeBoard(std::string fen) {
+        int rank = 8;
+        int file = 1;
 
-unsigned long long whiteKnights;
-
-unsigned long long blackKnights;
-
-unsigned long long whiteBishops;
-
-unsigned long long blackBishops;
-
-unsigned long long whiteRooks;
-
-unsigned long long blackRooks;
-
-unsigned long long whiteQueens;
-
-unsigned long long blackQueens;
-
-unsigned long long whiteKing;
-
-unsigned long long blackKing;
-
-bool isBitSet(unsigned long long board, int position) {
-    return (board & (1ULL << (63 - position))) != 0;
-}
-
-void initializeBoard() {
-    whitePawns = 0x000000000000FF00ULL; 
-    blackPawns = 0x00FF000000000000ULL;
-
-    whiteKnights = 0x0000000000000042ULL;
-    blackKnights = 0x4200000000000000ULL;
-
-    whiteBishops = 0x0000000000000024ULL;
-    blackBishops = 0x2400000000000000ULL;
-
-    whiteRooks = 0x0000000000000081ULL;
-    blackRooks = 0x8100000000000000ULL;
-
-    whiteQueens = 0x0000000000000010ULL;
-    blackQueens = 0x1000000000000000ULL;
-
-    whiteKing = 0x0000000000000008ULL;
-    blackKing = 0x0800000000000000ULL;
-}
-
-void printBoard() {
-    std::string board = "";
-
-    for (int rank = 0; rank < 8; rank++) {
-        board += std::to_string(rank + 1) + " ";
-
-        for (int file = 0; file < 8; file++) {
-            int square = (rank * 8) + file;
-
-            if (isBitSet(whitePawns, square)) {
-                board += " P";
+        for (char c : fen) {
+            if (c == ' ') {
+                break;
             }
-            else if (isBitSet(blackPawns, square)) {
-                board += " p";
+            else if (isdigit(c)) {
+                file += c - '0';
             }
-            else if (isBitSet(whiteKnights, square)) {
-                board += " N";
-            }
-            else if (isBitSet(blackKnights, square)) {
-                board += " n";
-            }
-            else if (isBitSet(whiteBishops, square)) {
-                board += " B";
-            }
-            else if (isBitSet(blackBishops, square)) {
-                board += " b";
-            }
-            else if (isBitSet(whiteRooks, square)) {
-                board += " R";
-            }
-            else if (isBitSet(blackRooks, square)) {
-                board += " r";
-            }
-            else if (isBitSet(whiteQueens, square)) {
-                board += " Q";
-            }
-            else if (isBitSet(blackQueens, square)) {
-                board += " q";
-            }
-            else if (isBitSet(whiteKing, square)) {
-                board += " K";
-            }
-            else if (isBitSet(blackKing, square)) {
-                board += " k";
+            else if (c == '/') {
+                rank--;
+                file = 1;
             }
             else {
-                board += " .";
+                // Do something with letter
+                Color color;
+                Piece piece;
+                int square = (file - 1) + (8 * (rank - 1));
+                if (c > 64 && c < 91) {     // white
+                    color = WHITE;
+                    c -= 65;
+                }
+                else if (c > 96 && c < 123) {      // black
+                    color = BLACK;
+                    c -= 97;
+                }
+
+                if (c == ('P' - 65)) {
+                    piece = PAWN;
+                }
+                else if (c == 'N' - 65) {
+                    piece = KNIGHT;
+                }
+                else if (c == 'B' - 65) {
+                    piece = BISHOP;
+                }
+                else if (c == 'R' - 65) {
+                    piece = ROOK;
+                }
+                else if (c == 'Q' - 65) {
+                    piece = QUEEN;
+                }
+                else {
+                    piece = KING;
+                }
+
+                Pieces[color][piece] |= (static_cast<Bitboard>(1) << square);
+                file++;
             }
-            
         }
-        board += "\n";
     }
 
-    board += "\n   A B C D E F G H\n\n";
-    
-    std::cout << board;
+    void printBoard() {
+        std::cout << "\n +---+---+---+---+---+---+---+---+\n" << std::endl;
+
+        for (int rank = 7; rank >= 0; rank--) {
+            for (int file = 0; file <= 7; file++) {
+
+            }
+        }
+    }
 }
+
+

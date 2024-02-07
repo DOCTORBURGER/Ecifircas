@@ -2,13 +2,14 @@
 #include <string>
 #include "board.h"
 
+using namespace Ecifricas;
+
 int main()
 {
     std::string inputLine;
     bool running = true;
 
-    initializeBoard();
-    printBoard();
+    initializeBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 
     while (running) {
         if (!std::getline(std::cin, inputLine)) {

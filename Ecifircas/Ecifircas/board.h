@@ -1,5 +1,8 @@
 #pragma once
 
-void initializeBoard();
+#include <string>
+#include "types.h"
 
-void printBoard();
+namespace Ecifricas {
+	void initializeBoard(std::string fen);
+}
