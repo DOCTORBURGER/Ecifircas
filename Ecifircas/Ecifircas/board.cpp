@@ -68,14 +68,38 @@ namespace Ecifricas {
         }
     }
 
+
+
     void printBoard() {
-        std::cout << "\n +---+---+---+---+---+---+---+---+\n" << std::endl;
+        std::string output = "\n +---+---+---+---+---+---+---+---+\n";
+        std::string pieceToChar = "PNBRQKpnbrqk";
 
-        for (int rank = 7; rank >= 0; rank--) {
+        for (int rank = 7; rank >= 0; rank--) { // FIX GROSS NESTING
             for (int file = 0; file <= 7; file++) {
+                bool pieceAddedFlag = false;
+                int square = file + (rank * 8);
+                output += " | ";
 
+                for (Piece piece = PAWN; piece <= KING; piece++) {
+                    for (Color color = WHITE; color <= BLACK; color++) {
+                        if ((Pieces[color][piece] & (static_cast<Bitboard>(1) << square)) != 0) {
+                            output += pieceToChar[(color * 6) + piece];
+                            pieceAddedFlag = true;
+                        }
+                    }
+                }
+
+                if (!pieceAddedFlag) {
+                    output += " ";
+                }
             }
+
+            output += " | " + std::to_string(rank + 1) + "\n +---+---+---+---+---+---+---+---+\n";
         }
+        
+        output += "   a   b   c   d   e   f   g   h\n";
+
+        std::cout << output << std::endl;
     }
 }
 

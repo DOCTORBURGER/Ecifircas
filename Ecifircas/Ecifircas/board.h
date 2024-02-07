@@ -5,4 +5,5 @@
 
 namespace Ecifricas {
 	void initializeBoard(std::string fen);
+	void printBoard();
 }

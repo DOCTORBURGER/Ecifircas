@@ -29,7 +29,7 @@ namespace Ecifricas {
 		NORTH_WEST = NORTH + WEST
 	};
 
-	enum Piece {
+	enum Piece : int {
 		PAWN, 
 		KNIGHT, 
 		BISHOP, 
@@ -39,10 +39,32 @@ namespace Ecifricas {
 		EMPTY = 6
 	};
 
+	inline Piece& operator++(Piece& piece) {
+		piece = static_cast<Piece>(static_cast<int>(piece) + 1);
+		return piece;
+	}
+
+	inline Piece operator++(Piece& piece, int) {
+		Piece temp = piece;
+		++piece; 
+		return temp;
+	}
+
 	enum Color : int {
 		WHITE = 0,
 		BLACK = 1
 	};
+
+	inline Color& operator++(Color& color) {
+		color = static_cast<Color>(static_cast<int>(color) + 1);
+		return color;
+	}
+
+	inline Color operator++(Color& color, int) {
+		Color temp = color;
+		++color; 
+		return temp;
+	}
 
 	// We may need to change this later, either to a short for efficiency, or add more fields for promotion
 	typedef struct {

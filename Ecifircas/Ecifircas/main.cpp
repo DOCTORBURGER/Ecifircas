@@ -10,7 +10,7 @@ int main()
     bool running = true;
 
     initializeBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
-
+    printBoard();
     while (running) {
         if (!std::getline(std::cin, inputLine)) {
             break; 
