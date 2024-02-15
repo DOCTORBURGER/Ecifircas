@@ -1,13 +1,16 @@
 #include <iostream>
 #include <string>
-#include "board.h"
 
-using namespace Ecifricas;
+#include "board.h"
+#include "bitboard.h"
+
+using namespace Ecifircas;
 
 int main()
 {
     std::string inputLine;
     bool running = true;
+    initialize_bitboards();
 
     setBoard("r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1");
     while (running) {

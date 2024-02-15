@@ -4,7 +4,7 @@
 #include "board.h"
 #include "types.h"
 
-namespace Ecifricas {
+namespace Ecifircas {
     Bitboard Pieces[2][6];
 
     // Starting position FEN: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1

@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-namespace Ecifricas {
+namespace Ecifircas {
 	using U64 = uint64_t;
 	using Bitboard = uint64_t;
 
@@ -16,6 +16,17 @@ namespace Ecifricas {
 		A7, B7, C7, D7, E7, F7, G7, H7,
 		A8, B8, C8, D8, E8, F8, G8, H8
 	};
+
+	inline Square& operator++(Square& square) {
+		square = static_cast<Square>(static_cast<int>(square) + 1);
+		return square;
+	}
+
+	inline Square operator++(Square& square, int) {
+		Square temp = square;
+		++square;
+		return temp;
+	}
 
 	enum Direction : int {
 		NORTH = 8,

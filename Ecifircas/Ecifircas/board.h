@@ -3,7 +3,7 @@
 #include <string>
 #include "types.h"
 
-namespace Ecifricas {
+namespace Ecifircas {
 	void setBoard(std::string fen);
 	void printBoard();
 }

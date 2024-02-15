@@ -127,10 +127,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="bitboard.cpp" />
     <ClCompile Include="board.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="movegen.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bitboard.h" />
     <ClInclude Include="board.h" />
     <ClInclude Include="types.h" />
   </ItemGroup>
