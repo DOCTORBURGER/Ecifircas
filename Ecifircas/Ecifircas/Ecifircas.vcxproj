@@ -127,7 +127,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Ecifircas.cpp" />
+    <ClCompile Include="bitboard.cpp" />
+    <ClCompile Include="board.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="movegen.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="bitboard.h" />
+    <ClInclude Include="board.h" />
+    <ClInclude Include="types.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
