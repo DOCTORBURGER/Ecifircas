@@ -12,6 +12,8 @@ namespace Ecifircas {
 		for (Square square = A1; square <= H8; square++) {
 			PawnAttacks[WHITE][square] = pawn_attacks_bb(get_square_bb(square), WHITE);
 			PawnAttacks[BLACK][square] = pawn_attacks_bb(get_square_bb(square), BLACK);
+
+
 		}
 	}
 }
