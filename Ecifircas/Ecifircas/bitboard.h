@@ -34,7 +34,7 @@ namespace Ecifircas {
 			:	dir == SOUTH			? bb >> 8
 			:	dir == NORTH + NORTH	? bb << 16 // These double directions are meant to handle double pawn pushes
 			:	dir == SOUTH + SOUTH	? bb >> 16
-			:	dir == EAST				? (bb & ~FileH) << 1 // HANDLES OFF-BOARD MOVEMENT
+			:	dir == EAST				? (bb & ~FileH) << 1 // SETTING FILE BITS TO 0 HANDLES OFF-BOARD MOVEMENT
 			:	dir == WEST				? (bb & ~FileA) >> 1
 			:	dir == NORTH_EAST		? (bb & ~FileH) << 9
 			:	dir == SOUTH_EAST		? (bb & ~FileH) >> 7
