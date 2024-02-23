@@ -212,23 +212,28 @@ namespace Ecifircas {
 			PawnAttacks[WHITE][square] = pawn_attacks_bb(get_square_bb(square), WHITE);
 			PawnAttacks[BLACK][square] = pawn_attacks_bb(get_square_bb(square), BLACK);
 
-			for (int moveOffset : { (int)NORTH, (int)SOUTH, (int)EAST, (int)WEST, (int)NORTH_WEST, (int)NORTH_EAST, (int)SOUTH_WEST, (int)SOUTH_EAST }) {
-				PsuedoAttacks[KING][square] |= shift_bit(get_square_bb(square), (Direction)moveOffset);
-			}
+			for (int moveOffset : { (int)NORTH, (int)SOUTH, (int)EAST, (int)WEST, (int)NORTH_WEST, (int)NORTH_EAST, (int)SOUTH_WEST, (int)SOUTH_EAST }) 
+                PsuedoAttacks[KING][square] |= shift_bit(get_square_bb(square), (Direction)moveOffset);
 
-			for (int shift : { 17, 15, 10, 6, -6, -10, -15, -17 }) {
-				PsuedoAttacks[KNIGHT][square] |= knight_shift(get_square_bb(square), shift);
-			}
+			for (int shift : { 17, 15, 10, 6, -6, -10, -15, -17 })
+                PsuedoAttacks[KNIGHT][square] |= knight_shift(get_square_bb(square), shift);
+
+            for (int moveOffset : {(int)NORTH_WEST, (int)NORTH_EAST, (int)SOUTH_WEST, (int)SOUTH_EAST}) {
+                Direction direction = (Direction)moveOffset;
+                for (Bitboard nextSquare = shift_bit(get_square_bb(square), direction); nextSquare != 0; nextSquare = shift_bit(nextSquare, direction))
+                    PsuedoAttacks[BISHOP][square] |= nextSquare;
+            }
+
+            for (int moveOffset : {(int)NORTH, (int)SOUTH, (int)EAST, (int)WEST}) {
+                Direction direction = (Direction)moveOffset;
+                for (Bitboard nextSquare = shift_bit(get_square_bb(square), direction); nextSquare != 0; nextSquare = shift_bit(nextSquare, direction))
+                    PsuedoAttacks[ROOK][square] |= nextSquare;
+            }
+
+            BishopMasks[square] = PsuedoAttacks[BISHOP][square] & ~Edges;
+            RookMasks[square] = PsuedoAttacks[ROOK][square] & ~Edges;
+
+            PsuedoAttacks[QUEEN][square] = (PsuedoAttacks[ROOK][square] | PsuedoAttacks[BISHOP][square]);
 		}
-
-		Bitboard bbtest = 0ULL;
-		set_bit(bbtest, H8);
-		bool resFalse = get_bit(bbtest, A2);
-		bool resTrue = get_bit(bbtest, H8);
-
-		printBitBoard(bbtest);
-		pop_bit(bbtest, H8);
-		printBitBoard(bbtest);
-		pop_bit(bbtest, A2);
 	}
 }
