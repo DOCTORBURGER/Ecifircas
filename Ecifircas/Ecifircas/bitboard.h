@@ -24,8 +24,6 @@ namespace Ecifircas {
 	constexpr Bitboard Rank7 = Rank1 << (8 * 6);
 	constexpr Bitboard Rank8 = Rank1 << (8 * 7);
 
-	constexpr Bitboard Edges = FileA | FileH | Rank1 | Rank8;
-
 	void initialize_bitboards();
 
 	constexpr Bitboard get_square_bb(Square s) { return (1ULL << s); }

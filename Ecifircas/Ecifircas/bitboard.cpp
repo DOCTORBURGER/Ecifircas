@@ -176,7 +176,7 @@ namespace Ecifircas {
         0x26002114058042ULL,
     };
 
-	void printBitBoard(Bitboard bb) {
+	void print_bitboard(Bitboard bb) {
 		std::string output = "\n +---+---+---+---+---+---+---+---+\n";
 
 		for (int rank = 7; rank >= 0; rank--) {
@@ -209,31 +209,42 @@ namespace Ecifircas {
 
 	void initialize_bitboards() {
 		for (Square square = A1; square <= H8; square++) {
-			PawnAttacks[WHITE][square] = pawn_attacks_bb(get_square_bb(square), WHITE);
-			PawnAttacks[BLACK][square] = pawn_attacks_bb(get_square_bb(square), BLACK);
+            Bitboard squareBitboard = get_square_bb(square);
+
+			PawnAttacks[WHITE][square] = pawn_attacks_bb(squareBitboard, WHITE);
+			PawnAttacks[BLACK][square] = pawn_attacks_bb(squareBitboard, BLACK);
 
 			for (int moveOffset : { (int)NORTH, (int)SOUTH, (int)EAST, (int)WEST, (int)NORTH_WEST, (int)NORTH_EAST, (int)SOUTH_WEST, (int)SOUTH_EAST }) 
-                PsuedoAttacks[KING][square] |= shift_bit(get_square_bb(square), (Direction)moveOffset);
+                PsuedoAttacks[KING][square] |= shift_bit(squareBitboard, (Direction)moveOffset);
 
 			for (int shift : { 17, 15, 10, 6, -6, -10, -15, -17 })
-                PsuedoAttacks[KNIGHT][square] |= knight_shift(get_square_bb(square), shift);
+                PsuedoAttacks[KNIGHT][square] |= knight_shift(squareBitboard, shift);
 
             for (int moveOffset : {(int)NORTH_WEST, (int)NORTH_EAST, (int)SOUTH_WEST, (int)SOUTH_EAST}) {
                 Direction direction = (Direction)moveOffset;
-                for (Bitboard nextSquare = shift_bit(get_square_bb(square), direction); nextSquare != 0; nextSquare = shift_bit(nextSquare, direction))
+                for (Bitboard nextSquare = shift_bit(squareBitboard, direction); nextSquare != 0; nextSquare = shift_bit(nextSquare, direction))
                     PsuedoAttacks[BISHOP][square] |= nextSquare;
             }
 
             for (int moveOffset : {(int)NORTH, (int)SOUTH, (int)EAST, (int)WEST}) {
                 Direction direction = (Direction)moveOffset;
-                for (Bitboard nextSquare = shift_bit(get_square_bb(square), direction); nextSquare != 0; nextSquare = shift_bit(nextSquare, direction))
+                for (Bitboard nextSquare = shift_bit(squareBitboard, direction); nextSquare != 0; nextSquare = shift_bit(nextSquare, direction))
                     PsuedoAttacks[ROOK][square] |= nextSquare;
             }
 
-            BishopMasks[square] = PsuedoAttacks[BISHOP][square] & ~Edges;
-            RookMasks[square] = PsuedoAttacks[ROOK][square] & ~Edges;
+            Bitboard occupancyEdgeMask = 0ULL;
+
+            if (!get_bit(FileA, square)) { occupancyEdgeMask |= FileA; }
+            if (!get_bit(FileH, square)) { occupancyEdgeMask |= FileH; }
+            if (!get_bit(Rank1, square)) { occupancyEdgeMask |= Rank1; }
+            if (!get_bit(Rank8, square)) { occupancyEdgeMask |= Rank8; }
+            
+            BishopMasks[square] = PsuedoAttacks[BISHOP][square] & ~occupancyEdgeMask;
+            RookMasks[square] = PsuedoAttacks[ROOK][square] & ~occupancyEdgeMask;
 
             PsuedoAttacks[QUEEN][square] = (PsuedoAttacks[ROOK][square] | PsuedoAttacks[BISHOP][square]);
 		}
+
+        print_bitboard(RookMasks[D5]);
 	}
 }
