@@ -33,5 +33,13 @@ namespace Ecifircas {
 				PsuedoAttacks[KNIGHT][square] |= knight_shift(get_square_bb(square), shift);
 			}
 		}
+
+		Bitboard bbtest = 0ULL;
+		set_bit(bbtest, H8);
+		Bitboard resFalse = get_bit(bbtest, A2);
+		Bitboard resTrue = get_bit(bbtest, H8);
+
+		pop_bit(bbtest, H8);
+		pop_bit(bbtest, A2);
 	}
 }

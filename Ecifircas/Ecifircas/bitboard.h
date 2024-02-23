@@ -28,6 +28,10 @@ namespace Ecifircas {
 
 	constexpr Bitboard get_square_bb(Square s) { return (1ULL << s); }
 
+	constexpr Bitboard get_bit(Bitboard bb, Square square) { return (bb & (1ULL << square)); }
+	constexpr void set_bit(Bitboard& bb, Square square) { bb |= (1ULL << square); }
+	constexpr void pop_bit(Bitboard& bb, Square square) { (get_bit(bb, square)) ? bb ^= (1ULL << square) : 0; }
+
 	// This will shift the set bits of a bitboard in a given direction
 	constexpr Bitboard shift_bit(Bitboard bb, Direction dir) {
 		return	dir == NORTH			? bb << 8
