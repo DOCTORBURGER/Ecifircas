@@ -1,12 +1,32 @@
 #include "types.h"
 #include <iostream>
 #include <cstdint>
+#include <string>
 
 #include "bitboard.h"
 
 namespace Ecifircas {
 	Bitboard PawnAttacks[2][64];
 	Bitboard PsuedoAttacks[6][64];
+
+	void printBitBoard(Bitboard bb) {
+		std::string output = "\n +---+---+---+---+---+---+---+---+\n";
+
+		for (int rank = 7; rank >= 0; rank--) {
+			for (int file = 0; file <= 7; file++) {
+				output += " | ";
+				int square = file + (rank * 8);
+
+				output += get_bit(bb, (Square)(square)) ? "1" : "0";
+			}
+
+			output += " | " + std::to_string(rank + 1) + "\n +---+---+---+---+---+---+---+---+\n";
+		}
+
+		output += "   a   b   c   d   e   f   g   h\n";
+
+		std::cout << output << std::endl;
+	}
 
 	Bitboard knight_shift(Bitboard bb, int shift) {
 		return	shift == 17		? (bb & ~FileH) << 17
@@ -36,10 +56,12 @@ namespace Ecifircas {
 
 		Bitboard bbtest = 0ULL;
 		set_bit(bbtest, H8);
-		Bitboard resFalse = get_bit(bbtest, A2);
-		Bitboard resTrue = get_bit(bbtest, H8);
+		bool resFalse = get_bit(bbtest, A2);
+		bool resTrue = get_bit(bbtest, H8);
 
+		printBitBoard(bbtest);
 		pop_bit(bbtest, H8);
+		printBitBoard(bbtest);
 		pop_bit(bbtest, A2);
 	}
 }
