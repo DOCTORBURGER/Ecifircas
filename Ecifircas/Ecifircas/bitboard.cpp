@@ -247,6 +247,22 @@ namespace Ecifircas {
         return occupancy;
     }
 
+    Bitboard get_bishop_attacks(Square square, Bitboard occupancy) {
+        occupancy &= BishopMasks[square];
+        occupancy *= BishopMagics[square];
+        occupancy >>= 64 - BishopOccupancyBits[square];
+
+        return BishopAttacks[square][occupancy];
+    }
+
+    Bitboard get_rook_attacks(Square square, Bitboard occupancy) {
+        occupancy &= RookMasks[square];
+        occupancy *= RookMagics[square];
+        occupancy >>= 64 - RookOccupancyBits[square];
+
+        return RookAttacks[square][occupancy];
+    }
+
 	void initialize_bitboards() {
 		for (Square square = A1; square <= H8; square++) {
             Bitboard squareBitboard = get_square_bb(square);
@@ -297,15 +313,15 @@ namespace Ecifircas {
             }
 		}
 
-        /* Nice Example
         Bitboard testOccupancyBitboard = 0ULL;
         set_bit(testOccupancyBitboard, A3);
         set_bit(testOccupancyBitboard, D1);
 
-        Bitboard testMagicIndex = testOccupancyBitboard * RookMagics[A1] >> 64 - RookOccupancyBits[A1];
+        print_bitboard(get_rook_attacks(A1, testOccupancyBitboard));
 
-        print_bitboard(testOccupancyBitboard);
-        print_bitboard(RookAttacks[A1][testMagicIndex]);
-        */
+        Bitboard testOccupancyBitboardBishop = 0ULL;
+        testOccupancyBitboardBishop |= FileD;
+
+        print_bitboard(get_bishop_attacks(G5, testOccupancyBitboardBishop));
 	}
 }
