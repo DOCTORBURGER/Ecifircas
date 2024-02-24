@@ -1,9 +1,10 @@
 #pragma once
 
 #include <string>
+
 #include "types.h"
 
 namespace Ecifircas {
-	void setBoard(std::string fen);
-	void printBoard();
+	void set_board(std::string fen);
+	void print_board();
 }

@@ -28,6 +28,31 @@ namespace Ecifircas {
 
 	constexpr Bitboard get_square_bb(Square s) { return (1ULL << s); }
 
+	constexpr bool get_bit(Bitboard bb, Square square) { return (bb & (1ULL << square)) != 0; }
+	constexpr void set_bit(Bitboard& bb, Square square) { bb |= (1ULL << square); }
+	constexpr void pop_bit(Bitboard& bb, Square square) { (get_bit(bb, square)) ? bb ^= (1ULL << square) : 0; }
+
+	// Brian Kernighan's way
+	constexpr int count_bits(Bitboard bb) {
+		int count = 0;
+
+		while (bb) {
+			count++; 
+
+			bb &= bb - 1;	// Resetting the LS1B
+		}					// 0001100 -> 0001011 then &= results in 001000
+
+		return count;
+	}
+
+	constexpr int get_ls1b_index(Bitboard bb) {
+		if (bb != 0)
+			return count_bits((bb & (~bb + 1)) - 1);
+
+		else
+			return -1;
+	}
+
 	// This will shift the set bits of a bitboard in a given direction
 	constexpr Bitboard shift_bit(Bitboard bb, Direction dir) {
 		return	dir == NORTH			? bb << 8
