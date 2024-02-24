@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstdint>
 #include <string>
+#include <array>
 
 #include "bitboard.h"
 
@@ -207,6 +208,45 @@ namespace Ecifircas {
 								: 0;
 	}
 
+    Bitboard sliding_attacks_on_the_fly(Square square, Piece pieceType, Bitboard block) {
+        if (pieceType != ROOK && pieceType != BISHOP) { return 0ULL; }
+
+        Bitboard squareBitboard = get_square_bb(square);
+        Bitboard attacks = 0ULL;
+
+        // Define direction arrays for each piece
+        const Direction bishopDirections[] = { NORTH_WEST, NORTH_EAST, SOUTH_WEST, SOUTH_EAST };
+        const Direction rookDirections[] = { NORTH, SOUTH, EAST, WEST };
+
+        // Use a pointer to refer to the correct array
+        const Direction* directions = (pieceType == BISHOP) ? bishopDirections : rookDirections;
+
+        for (int i = 0; i < 4; i++) {
+            Direction direction = directions[i];
+            for (Bitboard nextSquare = shift_bit(squareBitboard, direction); nextSquare != 0; nextSquare = shift_bit(nextSquare, direction)) {
+                attacks |= nextSquare;
+                if (block & nextSquare) break;
+            }
+        }
+
+        return attacks;
+    }
+
+    Bitboard set_occupancy(int index, int bits, Bitboard mask) {
+        Bitboard occupancy = 0ULL;
+
+        for (int count = 0; count < bits; count++) {
+            Square square = (Square)get_ls1b_index(mask);
+
+            pop_bit(mask, square);
+
+            if (index & (1 << count))
+                occupancy |= (1ULL << square);
+        }
+
+        return occupancy;
+    }
+
 	void initialize_bitboards() {
 		for (Square square = A1; square <= H8; square++) {
             Bitboard squareBitboard = get_square_bb(square);
@@ -220,17 +260,10 @@ namespace Ecifircas {
 			for (int shift : { 17, 15, 10, 6, -6, -10, -15, -17 })
                 PsuedoAttacks[KNIGHT][square] |= knight_shift(squareBitboard, shift);
 
-            for (int moveOffset : {(int)NORTH_WEST, (int)NORTH_EAST, (int)SOUTH_WEST, (int)SOUTH_EAST}) {
-                Direction direction = (Direction)moveOffset;
-                for (Bitboard nextSquare = shift_bit(squareBitboard, direction); nextSquare != 0; nextSquare = shift_bit(nextSquare, direction))
-                    PsuedoAttacks[BISHOP][square] |= nextSquare;
-            }
+            PsuedoAttacks[BISHOP][square] = sliding_attacks_on_the_fly(square, BISHOP, 0ULL);
+            PsuedoAttacks[ROOK][square] = sliding_attacks_on_the_fly(square, ROOK, 0ULL);
 
-            for (int moveOffset : {(int)NORTH, (int)SOUTH, (int)EAST, (int)WEST}) {
-                Direction direction = (Direction)moveOffset;
-                for (Bitboard nextSquare = shift_bit(squareBitboard, direction); nextSquare != 0; nextSquare = shift_bit(nextSquare, direction))
-                    PsuedoAttacks[ROOK][square] |= nextSquare;
-            }
+            PsuedoAttacks[QUEEN][square] = (PsuedoAttacks[ROOK][square] | PsuedoAttacks[BISHOP][square]);
 
             Bitboard occupancyEdgeMask = 0ULL;
 
@@ -242,9 +275,37 @@ namespace Ecifircas {
             BishopMasks[square] = PsuedoAttacks[BISHOP][square] & ~occupancyEdgeMask;
             RookMasks[square] = PsuedoAttacks[ROOK][square] & ~occupancyEdgeMask;
 
-            PsuedoAttacks[QUEEN][square] = (PsuedoAttacks[ROOK][square] | PsuedoAttacks[BISHOP][square]);
+            Bitboard bishopMask = BishopMasks[square];
+            Bitboard rookMask = RookMasks[square];
+             
+            int bishopMaskCount = count_bits(bishopMask);
+            int rookMaskCount = count_bits(rookMask);
+
+            int bishopOccupancyVariations = 1 << bishopMaskCount; // This is basically saying 2^count
+            int rookOccupancyVariations = 1 << rookMaskCount;
+
+            for (int count = 0; count < bishopOccupancyVariations; count++) {
+                Bitboard occupancy = set_occupancy(count, bishopMaskCount, bishopMask);
+                Bitboard magicIndex = occupancy * BishopMagics[square] >> 64 - BishopOccupancyBits[square];
+                BishopAttacks[square][magicIndex] = sliding_attacks_on_the_fly(square, BISHOP, occupancy);
+            }
+
+            for (int count = 0; count < rookOccupancyVariations; count++) {
+                Bitboard occupancy = set_occupancy(count, rookMaskCount, rookMask);
+                Bitboard magicIndex = occupancy * RookMagics[square] >> 64 - RookOccupancyBits[square];
+                RookAttacks[square][magicIndex] = sliding_attacks_on_the_fly(square, ROOK, occupancy);
+            }
 		}
 
-        print_bitboard(RookMasks[D5]);
+        /* Nice Example
+        Bitboard testOccupancyBitboard = 0ULL;
+        set_bit(testOccupancyBitboard, A3);
+        set_bit(testOccupancyBitboard, D1);
+
+        Bitboard testMagicIndex = testOccupancyBitboard * RookMagics[A1] >> 64 - RookOccupancyBits[A1];
+
+        print_bitboard(testOccupancyBitboard);
+        print_bitboard(RookAttacks[A1][testMagicIndex]);
+        */
 	}
 }
