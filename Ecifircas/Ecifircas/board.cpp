@@ -186,10 +186,10 @@ namespace Ecifircas {
         EnpassantSquare = string_to_square(fenParts[3]);
 
         for (Piece piece = PAWN; piece <= KING; piece++) {
-            Occupancies[0] |= Pieces[WHITE][piece];
-            Occupancies[1] |= Pieces[BLACK][piece];
+            Occupancies[WHITE] |= Pieces[WHITE][piece];
+            Occupancies[BLACK] |= Pieces[BLACK][piece];
         }
-        Occupancies[2] = Occupancies[0] | Occupancies[1];
+        Occupancies[2] = Occupancies[WHITE] | Occupancies[BLACK];
     }
 
 
