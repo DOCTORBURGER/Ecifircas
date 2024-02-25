@@ -8,6 +8,21 @@
 namespace Ecifircas {
     Bitboard Pieces[2][6];
 
+    Bitboard Occupancies[3];
+
+    enum Castle : int {
+        WK = 1,
+        WQ = 2,
+        BK = 4,
+        BQ = 8
+    };
+
+    int CastleRights = 15;
+
+    Color SideToMove = WHITE;
+
+    Square EnpassantSquare = NO_SQUARE;
+
     // Starting position FEN: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
     // letters stand for pieces, numbers is blank squares, and / means a new rank
     // w or b stands for white or black to move

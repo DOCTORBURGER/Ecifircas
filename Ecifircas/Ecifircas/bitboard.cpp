@@ -323,5 +323,6 @@ namespace Ecifircas {
         testOccupancyBitboardBishop |= FileD;
 
         print_bitboard(get_bishop_attacks(G5, testOccupancyBitboardBishop));
+        print_bitboard(get_rook_attacks(G5, testOccupancyBitboardBishop));
 	}
 }
