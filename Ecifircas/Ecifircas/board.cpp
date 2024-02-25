@@ -1,6 +1,9 @@
 #include <iostream>
 #include <cstdint>
 #include <string>
+#include <regex>
+#include <vector>
+#include <sstream>
 
 #include "board.h"
 #include "types.h"
@@ -23,6 +26,49 @@ namespace Ecifircas {
 
     Square EnpassantSquare = NO_SQUARE;
 
+    bool isValidRank(const std::string& rank) {
+        if (rank.empty()) return false;
+
+        int count = 0;
+        for (char ch : rank) {
+            if (std::isdigit(ch)) {
+                count += ch - '0'; // Convert char to int and add to count
+            }
+            else if (std::isalpha(ch)) {
+                count++; // Increment count for each piece
+            }
+            else {
+                return false; // Invalid character
+            }
+        }
+
+        return count == 8; // Each rank must have exactly 8 squares
+    }
+
+    bool isValidFEN(const std::string& fen) {
+        std::istringstream iss(fen);
+        std::vector<std::string> parts;
+        std::string part;
+
+        while (std::getline(iss, part, ' ')) {
+            parts.push_back(part);
+        }
+
+        if (parts.size() != 6) return false; // FEN should have 6 parts
+
+        std::istringstream ranks(parts[0]);
+        std::string rank;
+        while (std::getline(ranks, rank, '/')) {
+            if (!isValidRank(rank)) return false;
+        }
+
+        std::regex fenRegex(
+            "^([rnbqkpRNBQKP1-8]{1,8}/){7}[rnbqkpRNBQKP1-8]{1,8}\\s[bw]\\s(-|[KQkq]{1,4})\\s(-|[a-h][1-8])\\s\\d+\\s\\d+$"
+        );
+
+        return std::regex_match(fen, fenRegex);
+    }
+
     // Starting position FEN: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
     // letters stand for pieces, numbers is blank squares, and / means a new rank
     // w or b stands for white or black to move
@@ -31,6 +77,11 @@ namespace Ecifircas {
     // 0 is halfmove clock, used for 50 move rule counting
     // 1 is full move clock, starts at one and is incremented after blacks move
     void set_board(std::string fen) {
+        if (!isValidFEN(fen)) {
+            std::cout << "Invalid FEN" << std::endl;
+            return;
+        }
+
         int rank = 8;
         int file = 1;
 
