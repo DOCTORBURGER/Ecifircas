@@ -312,16 +312,5 @@ namespace Ecifircas {
                 RookAttacks[square][magicIndex] = sliding_attacks_on_the_fly(square, ROOK, occupancy);
             }
 		}
-
-        Bitboard testOccupancyBitboard = 0ULL;
-        set_bit(testOccupancyBitboard, A3);
-        set_bit(testOccupancyBitboard, D1);
-
-        print_bitboard(get_rook_attacks(A1, testOccupancyBitboard));
-
-        Bitboard testOccupancyBitboardBishop = 0ULL;
-        testOccupancyBitboardBishop |= FileD;
-
-        print_bitboard(get_bishop_attacks(G5, testOccupancyBitboardBishop));
 	}
 }
