@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClInclude Include="bitboard.h" />
     <ClInclude Include="board.h" />
+    <ClInclude Include="movegen.h" />
     <ClInclude Include="types.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
