@@ -7,6 +7,7 @@
 
 #include "board.h"
 #include "types.h"
+#include "bitboard.h"
 
 namespace Ecifircas {
     Bitboard Pieces[2][6];
@@ -238,6 +239,16 @@ namespace Ecifircas {
         output += SquareToCoordinates[EnpassantSquare];
 
         std::cout << output << std::endl;
+    }
+
+    bool is_square_attacked(Square square, Color side) {
+        Color oppositeSide = (side == WHITE) ? BLACK : WHITE;
+        return  (pawn_attacks_bb(square, oppositeSide) & Pieces[side][PAWN])
+            | (attacks_bb(square, Occupancies[BOTH], KNIGHT) & Pieces[side][KNIGHT])
+            | (attacks_bb(square, Occupancies[BOTH], BISHOP) & Pieces[side][BISHOP])
+            | (attacks_bb(square, Occupancies[BOTH], ROOK) & Pieces[side][ROOK])
+            | (attacks_bb(square, Occupancies[BOTH], QUEEN) & Pieces[side][QUEEN])
+            | (attacks_bb(square, Occupancies[BOTH], KING) & Pieces[side][KING]);
     }
 }
 

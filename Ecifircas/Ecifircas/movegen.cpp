@@ -7,6 +7,6 @@
 #include "movegen.h"
 
 namespace Ecifircas {
-
+	
 }
 
