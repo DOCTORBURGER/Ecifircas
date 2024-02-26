@@ -223,10 +223,10 @@ namespace Ecifircas {
         
         output += "   a   b   c   d   e   f   g   h\n\n";
 
-        output += "To move: ";
+        output += "    To move:       ";
         output += (SideToMove == WHITE) ? "white\n" : "black\n";
 
-        output += "Castle rights: ";
+        output += "    Castle rights: ";
         if (CastleRights & WK) output += "K";
         if (CastleRights & WQ) output += "Q";
         if (CastleRights & BK) output += "k";
@@ -234,7 +234,7 @@ namespace Ecifircas {
         if (!(CastleRights & (WK | WQ | BK | BQ))) output += "-";
         output += "\n";
 
-        output += "EP square: ";
+        output += "    EP square:     ";
         output += SquareToCoordinates[EnpassantSquare];
 
         std::cout << output << std::endl;
