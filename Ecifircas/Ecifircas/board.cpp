@@ -250,6 +250,26 @@ namespace Ecifircas {
             | (attacks_bb(square, Occupancies[BOTH], QUEEN) & Pieces[side][QUEEN])
             | (attacks_bb(square, Occupancies[BOTH], KING) & Pieces[side][KING]);
     }
+
+    void print_attacked_squares(Color side) {
+        std::string output = "\n +---+---+---+---+---+---+---+---+\n";
+        std::string pieceToChar = "PNBRQKpnbrqk";
+
+        for (int rank = 7; rank >= 0; rank--) {
+            for (int file = 0; file <= 7; file++) {
+                int square = file + (rank * 8);
+                output += " | ";
+
+                output += (is_square_attacked((Square)square, side)) ? "1" : " ";
+            }
+
+            output += " | " + std::to_string(rank + 1) + "\n +---+---+---+---+---+---+---+---+\n";
+        }
+
+        output += "   a   b   c   d   e   f   g   h\n\n";
+
+        std::cout << output << std::endl;
+    }
 }
 
 
