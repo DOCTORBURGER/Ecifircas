@@ -7,6 +7,7 @@
 
 #include "board.h"
 #include "types.h"
+#include "bitboard.h"
 
 namespace Ecifircas {
     Bitboard Pieces[2][6];
@@ -223,10 +224,10 @@ namespace Ecifircas {
         
         output += "   a   b   c   d   e   f   g   h\n\n";
 
-        output += "To move: ";
+        output += "    To move:       ";
         output += (SideToMove == WHITE) ? "white\n" : "black\n";
 
-        output += "Castle rights: ";
+        output += "    Castle rights: ";
         if (CastleRights & WK) output += "K";
         if (CastleRights & WQ) output += "Q";
         if (CastleRights & BK) output += "k";
@@ -234,8 +235,38 @@ namespace Ecifircas {
         if (!(CastleRights & (WK | WQ | BK | BQ))) output += "-";
         output += "\n";
 
-        output += "EP square: ";
+        output += "    EP square:     ";
         output += SquareToCoordinates[EnpassantSquare];
+
+        std::cout << output << std::endl;
+    }
+
+    bool is_square_attacked(Square square, Color side) {
+        Color oppositeSide = (side == WHITE) ? BLACK : WHITE;
+        return  (pawn_attacks_bb(square, oppositeSide) & Pieces[side][PAWN])
+            | (attacks_bb(square, Occupancies[BOTH], KNIGHT) & Pieces[side][KNIGHT])
+            | (attacks_bb(square, Occupancies[BOTH], BISHOP) & Pieces[side][BISHOP])
+            | (attacks_bb(square, Occupancies[BOTH], ROOK) & Pieces[side][ROOK])
+            | (attacks_bb(square, Occupancies[BOTH], QUEEN) & Pieces[side][QUEEN])
+            | (attacks_bb(square, Occupancies[BOTH], KING) & Pieces[side][KING]);
+    }
+
+    void print_attacked_squares(Color side) {
+        std::string output = "\n +---+---+---+---+---+---+---+---+\n";
+        std::string pieceToChar = "PNBRQKpnbrqk";
+
+        for (int rank = 7; rank >= 0; rank--) {
+            for (int file = 0; file <= 7; file++) {
+                int square = file + (rank * 8);
+                output += " | ";
+
+                output += (is_square_attacked((Square)square, side)) ? "1" : " ";
+            }
+
+            output += " | " + std::to_string(rank + 1) + "\n +---+---+---+---+---+---+---+---+\n";
+        }
+
+        output += "   a   b   c   d   e   f   g   h\n\n";
 
         std::cout << output << std::endl;
     }

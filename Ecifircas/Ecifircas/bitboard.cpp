@@ -7,8 +7,8 @@
 #include "bitboard.h"
 
 namespace Ecifircas {
-	Bitboard PawnAttacks[2][64];
-	Bitboard PsuedoAttacks[6][64];
+    Bitboard PawnAttacks[2][64];
+    Bitboard PseudoAttacks[6][64];
 
 	int RookOccupancyBits[64] = {
 		12, 11, 11, 11, 11, 11, 11, 12,
@@ -271,15 +271,15 @@ namespace Ecifircas {
 			PawnAttacks[BLACK][square] = pawn_attacks_bb(squareBitboard, BLACK);
 
 			for (int moveOffset : { (int)NORTH, (int)SOUTH, (int)EAST, (int)WEST, (int)NORTH_WEST, (int)NORTH_EAST, (int)SOUTH_WEST, (int)SOUTH_EAST }) 
-                PsuedoAttacks[KING][square] |= shift_bit(squareBitboard, (Direction)moveOffset);
+                PseudoAttacks[KING][square] |= shift_bit(squareBitboard, (Direction)moveOffset);
 
 			for (int shift : { 17, 15, 10, 6, -6, -10, -15, -17 })
-                PsuedoAttacks[KNIGHT][square] |= knight_shift(squareBitboard, shift);
+                PseudoAttacks[KNIGHT][square] |= knight_shift(squareBitboard, shift);
 
-            PsuedoAttacks[BISHOP][square] = sliding_attacks_on_the_fly(square, BISHOP, 0ULL);
-            PsuedoAttacks[ROOK][square] = sliding_attacks_on_the_fly(square, ROOK, 0ULL);
+            PseudoAttacks[BISHOP][square] = sliding_attacks_on_the_fly(square, BISHOP, 0ULL);
+            PseudoAttacks[ROOK][square] = sliding_attacks_on_the_fly(square, ROOK, 0ULL);
 
-            PsuedoAttacks[QUEEN][square] = (PsuedoAttacks[ROOK][square] | PsuedoAttacks[BISHOP][square]);
+            PseudoAttacks[QUEEN][square] = (PseudoAttacks[ROOK][square] | PseudoAttacks[BISHOP][square]);
 
             Bitboard occupancyEdgeMask = 0ULL;
 
@@ -288,8 +288,8 @@ namespace Ecifircas {
             if (!get_bit(Rank1, square)) { occupancyEdgeMask |= Rank1; }
             if (!get_bit(Rank8, square)) { occupancyEdgeMask |= Rank8; }
             
-            BishopMasks[square] = PsuedoAttacks[BISHOP][square] & ~occupancyEdgeMask;
-            RookMasks[square] = PsuedoAttacks[ROOK][square] & ~occupancyEdgeMask;
+            BishopMasks[square] = PseudoAttacks[BISHOP][square] & ~occupancyEdgeMask;
+            RookMasks[square] = PseudoAttacks[ROOK][square] & ~occupancyEdgeMask;
 
             Bitboard bishopMask = BishopMasks[square];
             Bitboard rookMask = RookMasks[square];
@@ -302,13 +302,13 @@ namespace Ecifircas {
 
             for (int count = 0; count < bishopOccupancyVariations; count++) {
                 Bitboard occupancy = set_occupancy(count, bishopMaskCount, bishopMask);
-                Bitboard magicIndex = occupancy * BishopMagics[square] >> 64 - BishopOccupancyBits[square];
+                Bitboard magicIndex = occupancy * BishopMagics[square] >> (64 - BishopOccupancyBits[square]);
                 BishopAttacks[square][magicIndex] = sliding_attacks_on_the_fly(square, BISHOP, occupancy);
             }
 
             for (int count = 0; count < rookOccupancyVariations; count++) {
                 Bitboard occupancy = set_occupancy(count, rookMaskCount, rookMask);
-                Bitboard magicIndex = occupancy * RookMagics[square] >> 64 - RookOccupancyBits[square];
+                Bitboard magicIndex = occupancy * RookMagics[square] >> (64 - RookOccupancyBits[square]);
                 RookAttacks[square][magicIndex] = sliding_attacks_on_the_fly(square, ROOK, occupancy);
             }
 		}

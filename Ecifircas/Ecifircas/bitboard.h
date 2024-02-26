@@ -24,6 +24,9 @@ namespace Ecifircas {
 	constexpr Bitboard Rank7 = Rank1 << (8 * 6);
 	constexpr Bitboard Rank8 = Rank1 << (8 * 7);
 
+	extern Bitboard PawnAttacks[2][64];
+	extern Bitboard PseudoAttacks[6][64];
+
 	void initialize_bitboards();
 
 	constexpr Bitboard get_square_bb(Square s) { return (1ULL << s); }
@@ -72,4 +75,27 @@ namespace Ecifircas {
 		return	c == WHITE	? shift_bit(bb, NORTH_WEST) | shift_bit(bb, NORTH_EAST)
 							: shift_bit(bb, SOUTH_WEST) | shift_bit(bb, SOUTH_EAST);
 	}
+
+	constexpr Bitboard pawn_attacks_bb(Square square, Color c) {
+		return PawnAttacks[c][square];
+	}
+
+	Bitboard get_bishop_attacks(Square square, Bitboard occupancy);
+	Bitboard get_rook_attacks(Square square, Bitboard occupancy);
+
+	constexpr Bitboard attacks_bb(Square square, Bitboard occupancy, Piece piece) {
+		switch (piece)
+		{
+		case BISHOP:
+			return get_bishop_attacks(square, occupancy);
+		case ROOK:
+			return get_rook_attacks(square, occupancy);
+		case QUEEN:
+			return attacks_bb(square, occupancy, ROOK) | attacks_bb(square, occupancy, BISHOP);
+		default:
+			return PseudoAttacks[piece][square];
+		}
+	}
+
+	void print_bitboard(Bitboard bb);
 }
