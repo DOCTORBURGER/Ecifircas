@@ -17,6 +17,7 @@ namespace Ecifircas
 		for (Piece piece = PAWN; piece <= KING; piece++) {
 			bitboard = Pieces[SideToMove][piece];
 			Bitboard emptySquares = ~Occupancies[BOTH];
+			Color oppositeColor = (SideToMove) ? WHITE : BLACK;
 
 			// Generate white pawn and castling king moves
 			if (SideToMove == WHITE) {
@@ -91,15 +92,26 @@ namespace Ecifircas
 				}
 			}
 
-			// Generate knight moves
+			// Generate all other moves
+			while (bitboard && piece != PAWN) {
+				sourceSquare = (Square)get_ls1b_index(bitboard);
 
-			// Generate bishop moves
+				attacks = attacks_bb(sourceSquare, Occupancies[BOTH], piece) & ~Occupancies[SideToMove];
 
-			// Generate rook moves
+				while (attacks) {
+					destSquare = (Square)get_ls1b_index(attacks);
 
-			// Generate queen moves
+					if (!get_bit(Occupancies[oppositeColor], destSquare))
+						int i = 0; // Placeholder, quiet moves
 
-			// Generate king moves
+					else
+						int j = 0; // Placeholder, attack
+
+					pop_bit(attacks, destSquare);
+				}
+
+				pop_bit(bitboard, sourceSquare);
+			}
 		}
 	}
 }
