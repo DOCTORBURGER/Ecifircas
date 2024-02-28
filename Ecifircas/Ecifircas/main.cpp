@@ -13,7 +13,7 @@ int main()
     bool running = true;
     initialize_bitboards();
 
-    set_board("rnbqkbnr/ppp1p1pp/5p2/3pP3/8/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 3"); // "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1"
+    set_board("rnbqkbnr/ppp1pp1p/8/8/3pP3/N7/PPPP1PpP/R1BQKB1R b KQkq e3 0 7"); // "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1"
     generate_moves();
     while (running) {
         if (!std::getline(std::cin, inputLine)) {

@@ -32,7 +32,6 @@ namespace Ecifircas
 					attacks = pawn_attacks_bb(nonPromoters, WHITE) & Occupancies[BLACK];
 					Bitboard promotionAttacks = pawn_attacks_bb(bitboard & Rank7, WHITE) & Occupancies[BLACK];
 					Bitboard enpassantAttacks = pawn_attacks_bb(bitboard & Rank5, WHITE) & get_square_bb(EnpassantSquare);
-					int i = 0;
 				}
 			}
 			// Black pawn and castling king moves
@@ -44,6 +43,11 @@ namespace Ecifircas
 
 					Bitboard singlePushes = shift_bit(nonPromoters, SOUTH) & emptySquares;
 					Bitboard doublePushes = shift_bit(singlePushes & Rank6, SOUTH) & emptySquares;
+
+					// Might redo this later, for now it works for the DESTINATIONS: SOURCE WILL BE A PROBLEM
+					attacks = pawn_attacks_bb(nonPromoters, BLACK) & Occupancies[WHITE];
+					Bitboard promotionAttacks = pawn_attacks_bb(bitboard & Rank2, BLACK) & Occupancies[WHITE];
+					Bitboard enpassantAttacks = pawn_attacks_bb(bitboard & Rank4, BLACK) & get_square_bb(EnpassantSquare);
 				}
 			}
 
