@@ -193,8 +193,6 @@ namespace Ecifircas {
         Occupancies[2] = Occupancies[WHITE] | Occupancies[BLACK];
     }
 
-
-
     void print_board() {
         std::string output = "\n +---+---+---+---+---+---+---+---+\n";
         std::string pieceToChar = "PNBRQKpnbrqk";
