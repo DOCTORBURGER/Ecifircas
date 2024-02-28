@@ -177,7 +177,8 @@ namespace Ecifircas {
         0x26002114058042ULL,
     };
 
-	void print_bitboard(Bitboard bb) {
+	void print_bitboard(Bitboard bb) 
+    {
 		std::string output = "\n +---+---+---+---+---+---+---+---+\n";
 
 		for (int rank = 7; rank >= 0; rank--) {
@@ -185,7 +186,7 @@ namespace Ecifircas {
 				output += " | ";
 				int square = file + (rank * 8);
 
-				output += get_bit(bb, (Square)(square)) ? "1" : "0";
+				output += get_bit(bb, (Square)(square)) ? "1" : " ";
 			}
 
 			output += " | " + std::to_string(rank + 1) + "\n +---+---+---+---+---+---+---+---+\n";
@@ -196,7 +197,8 @@ namespace Ecifircas {
 		std::cout << output << std::endl;
 	}
 
-	Bitboard knight_shift(Bitboard bb, int shift) {
+	Bitboard knight_shift(Bitboard bb, int shift) 
+    {
 		return	shift == 17		? (bb & ~FileH) << 17
 			:	shift == 15		? (bb & ~FileA) << 15
 			:	shift == 10		? (bb & ~FileH & ~FileG) << 10
@@ -208,7 +210,8 @@ namespace Ecifircas {
 								: 0;
 	}
 
-    Bitboard sliding_attacks_on_the_fly(Square square, Piece pieceType, Bitboard block) {
+    Bitboard sliding_attacks_on_the_fly(Square square, Piece pieceType, Bitboard block) 
+    {
         if (pieceType != ROOK && pieceType != BISHOP) { return 0ULL; }
 
         Bitboard squareBitboard = get_square_bb(square);
@@ -232,7 +235,8 @@ namespace Ecifircas {
         return attacks;
     }
 
-    Bitboard set_occupancy(int index, int bits, Bitboard mask) {
+    Bitboard set_occupancy(int index, int bits, Bitboard mask) 
+    {
         Bitboard occupancy = 0ULL;
 
         for (int count = 0; count < bits; count++) {
@@ -247,7 +251,8 @@ namespace Ecifircas {
         return occupancy;
     }
 
-    Bitboard get_bishop_attacks(Square square, Bitboard occupancy) {
+    Bitboard get_bishop_attacks(Square square, Bitboard occupancy) 
+    {
         occupancy &= BishopMasks[square];
         occupancy *= BishopMagics[square];
         occupancy >>= 64 - BishopOccupancyBits[square];
@@ -255,7 +260,8 @@ namespace Ecifircas {
         return BishopAttacks[square][occupancy];
     }
 
-    Bitboard get_rook_attacks(Square square, Bitboard occupancy) {
+    Bitboard get_rook_attacks(Square square, Bitboard occupancy) 
+    {
         occupancy &= RookMasks[square];
         occupancy *= RookMagics[square];
         occupancy >>= 64 - RookOccupancyBits[square];
@@ -263,7 +269,8 @@ namespace Ecifircas {
         return RookAttacks[square][occupancy];
     }
 
-	void initialize_bitboards() {
+	void initialize_bitboards() 
+    {
 		for (Square square = A1; square <= H8; square++) {
             Bitboard squareBitboard = get_square_bb(square);
 
