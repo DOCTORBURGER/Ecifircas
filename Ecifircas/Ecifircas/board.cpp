@@ -173,10 +173,10 @@ namespace Ecifircas
         CastleRights = 0;
         for (char c : fenParts[2]) {
             switch (c) {
-                case 'K': CastleRights |= WK; break;
-                case 'Q': CastleRights |= WQ; break;
-                case 'k': CastleRights |= BK; break;
-                case 'q': CastleRights |= BQ; break;
+                case 'K': CastleRights |= WHITE_KINGSIDE; break;
+                case 'Q': CastleRights |= WHITE_QUEENSIDE; break;
+                case 'k': CastleRights |= BLACK_KINGSIDE; break;
+                case 'q': CastleRights |= BLACK_QUEENSIDE; break;
                 default: break;
             }
         }
@@ -223,11 +223,11 @@ namespace Ecifircas
         output += (SideToMove == WHITE) ? "white\n" : "black\n";
 
         output += "    Castle rights: ";
-        if (CastleRights & WK) output += "K";
-        if (CastleRights & WQ) output += "Q";
-        if (CastleRights & BK) output += "k";
-        if (CastleRights & BQ) output += "q";
-        if (!(CastleRights & (WK | WQ | BK | BQ))) output += "-";
+        if (CastleRights & WHITE_KINGSIDE) output += "K";
+        if (CastleRights & WHITE_QUEENSIDE) output += "Q";
+        if (CastleRights & BLACK_KINGSIDE) output += "k";
+        if (CastleRights & BLACK_QUEENSIDE) output += "q";
+        if (!(CastleRights & (WHITE_KINGSIDE | WHITE_QUEENSIDE | BLACK_KINGSIDE | BLACK_QUEENSIDE))) output += "-";
         output += "\n";
 
         output += "    EP square:     ";
@@ -236,14 +236,14 @@ namespace Ecifircas
         std::cout << output << std::endl;
     }
 
-    bool is_square_attacked(Square square, Color side) {
-        Color oppositeSide = (side == WHITE) ? BLACK : WHITE;
-        return  (pawn_attacks_bb(square, oppositeSide) & Pieces[side][PAWN])
-            | (attacks_bb(square, Occupancies[BOTH], KNIGHT) & Pieces[side][KNIGHT])
-            | (attacks_bb(square, Occupancies[BOTH], BISHOP) & Pieces[side][BISHOP])
-            | (attacks_bb(square, Occupancies[BOTH], ROOK) & Pieces[side][ROOK])
-            | (attacks_bb(square, Occupancies[BOTH], QUEEN) & Pieces[side][QUEEN])
-            | (attacks_bb(square, Occupancies[BOTH], KING) & Pieces[side][KING]);
+    bool is_square_attacked(Square square, Color attackingSide) {
+        Color oppositeSide = (attackingSide == WHITE) ? BLACK : WHITE;
+        return  (pawn_attacks_bb(square, oppositeSide) & Pieces[attackingSide][PAWN])
+            | (attacks_bb(square, Occupancies[BOTH], KNIGHT) & Pieces[attackingSide][KNIGHT])
+            | (attacks_bb(square, Occupancies[BOTH], BISHOP) & Pieces[attackingSide][BISHOP])
+            | (attacks_bb(square, Occupancies[BOTH], ROOK) & Pieces[attackingSide][ROOK])
+            | (attacks_bb(square, Occupancies[BOTH], QUEEN) & Pieces[attackingSide][QUEEN])
+            | (attacks_bb(square, Occupancies[BOTH], KING) & Pieces[attackingSide][KING]);
     }
 
     void print_attacked_squares(Color side) {

@@ -79,10 +79,10 @@ namespace Ecifircas {
 	}
 
 	enum Castle : int {
-		WK = 1,
-		WQ = 2,
-		BK = 4,
-		BQ = 8
+		WHITE_KINGSIDE = 1,
+		WHITE_QUEENSIDE = 2,
+		BLACK_KINGSIDE = 4,
+		BLACK_QUEENSIDE = 8
 	};
 
 	// We may need to change this later, either to a short for efficiency, or add more fields for promotion
