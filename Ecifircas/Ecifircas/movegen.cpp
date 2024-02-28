@@ -71,7 +71,23 @@ namespace Ecifircas
 				}
 
 				if (piece == KING) {
+					// Kingside castle
+					if (CastleRights & BLACK_KINGSIDE) {
+						if (get_bit(emptySquares, F8) && get_bit(emptySquares, G8)) {
+							if (!is_square_attacked(E8, WHITE) && !is_square_attacked(F8, WHITE) && !is_square_attacked(G8, WHITE)) {
+								// Castle
+							}
+						}
+					}
 
+					// Queenside castle
+					if (CastleRights & BLACK_QUEENSIDE) {
+						if (get_bit(emptySquares, D8) && get_bit(emptySquares, C8) && get_bit(emptySquares, B8)) {
+							if (!is_square_attacked(E8, WHITE) && !is_square_attacked(D8, WHITE) && !is_square_attacked(C8, WHITE)) {
+								// Castle
+							}
+						}
+					}
 				}
 			}
 
