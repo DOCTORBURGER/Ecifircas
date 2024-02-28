@@ -9,17 +9,11 @@
 #include "types.h"
 #include "bitboard.h"
 
-namespace Ecifircas {
+namespace Ecifircas 
+{
     Bitboard Pieces[2][6];
 
     Bitboard Occupancies[3];
-
-    enum Castle : int {
-        WK = 1,
-        WQ = 2,
-        BK = 4,
-        BQ = 8
-    };
 
     int CastleRights = 15;
 
@@ -38,7 +32,8 @@ namespace Ecifircas {
         "a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8", "no square"
     };
 
-    std::vector<std::string> split(const std::string& str, char delimiter) {
+    std::vector<std::string> split(const std::string& str, char delimiter) 
+    {
         std::stringstream ss(str);
         std::string token;
         std::vector<std::string> tokens;
@@ -48,7 +43,8 @@ namespace Ecifircas {
         return tokens;
     }
 
-    bool is_valid_rank(const std::string& rank) {
+    bool is_valid_rank(const std::string& rank) 
+    {
         if (rank.empty()) return false;
 
         int count = 0;
@@ -67,7 +63,8 @@ namespace Ecifircas {
         return count == 8; // Each rank must have exactly 8 squares
     }
 
-    bool is_valid_FEN(const std::string& fen) {
+    bool is_valid_FEN(const std::string& fen) 
+    {
         std::istringstream iss(fen);
         std::vector<std::string> parts;
         std::string part;
@@ -192,8 +189,6 @@ namespace Ecifircas {
         }
         Occupancies[2] = Occupancies[WHITE] | Occupancies[BLACK];
     }
-
-
 
     void print_board() {
         std::string output = "\n +---+---+---+---+---+---+---+---+\n";

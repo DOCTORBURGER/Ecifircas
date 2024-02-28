@@ -3,6 +3,7 @@
 
 #include "board.h"
 #include "bitboard.h"
+#include "movegen.h"
 
 using namespace Ecifircas;
 
@@ -12,7 +13,8 @@ int main()
     bool running = true;
     initialize_bitboards();
 
-    set_board("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1"); // "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1"
+    set_board("rnbqkbnr/ppp1pp1p/8/8/3pP3/N7/PPPP1PpP/R1BQKB1R b KQkq e3 0 7"); // "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1"
+    generate_moves();
     while (running) {
         if (!std::getline(std::cin, inputLine)) {
             break; 

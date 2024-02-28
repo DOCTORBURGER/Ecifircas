@@ -78,6 +78,13 @@ namespace Ecifircas {
 		return temp;
 	}
 
+	enum Castle : int {
+		WK = 1,
+		WQ = 2,
+		BK = 4,
+		BQ = 8
+	};
+
 	// We may need to change this later, either to a short for efficiency, or add more fields for promotion
 	typedef struct {
 		int start;

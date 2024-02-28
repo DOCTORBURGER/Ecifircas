@@ -84,6 +84,10 @@ namespace Ecifircas {
 	Bitboard get_rook_attacks(Square square, Bitboard occupancy);
 
 	constexpr Bitboard attacks_bb(Square square, Bitboard occupancy, Piece piece) {
+		if (PAWN) { // NO PAWNS
+			return 0ULL;
+		}
+
 		switch (piece)
 		{
 		case BISHOP:
