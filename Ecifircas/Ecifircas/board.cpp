@@ -70,7 +70,7 @@ namespace Ecifircas
             if (0x8 & flag) {
                 Piece promotedPiece = Piece(KNIGHT + (flag & 0x3));
                 pop_bit(Pieces[SideToMove][piece], targetSquare);
-                pop_bit(Pieces[SideToMove][promotedPiece], targetSquare);
+                set_bit(Pieces[SideToMove][promotedPiece], targetSquare);
             }
 
             if (flag == EP_CAPTURE) {

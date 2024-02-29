@@ -4,6 +4,7 @@
 
 namespace Ecifircas
 {
-	extern long Nodes;
+	extern long long Nodes;
 	void perft_driver(int depth);
+	void perft_test(int depth);
 }
