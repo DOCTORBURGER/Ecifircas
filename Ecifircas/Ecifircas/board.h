@@ -10,6 +10,7 @@ namespace Ecifircas {
 	extern Bitboard Occupancies[3];
 	extern int CastleRights;
 	extern Square EnpassantSquare;
+	extern const std::string SquareToCoordinates[];
 	
 	void set_board(std::string fen);
 	void print_board();
