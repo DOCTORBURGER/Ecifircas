@@ -13,16 +13,30 @@ int main()
     bool running = true;
     initialize_bitboards();
 
-    set_board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); // "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1"
+    set_board("r6r/p1ppkpb1/b1n1pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQ - 0 2"); // "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1"
     print_board();
 
-    copy_board();
+    Moves moves;
+    generate_moves(moves);
+    int legalMoves = 0;
+    for (int i = 0; i < moves.get_count(); i++) {
+        Move move = moves.get_move(i);
 
-    set_board("8/8/8/8/8/8/8/8 b - - 0 1");
-    print_board();
+        copy_board();
 
-    restore_from_copy();
-    print_board();
+        if (!make_move(move, ALL_MOVES)) {
+            continue;
+        }
+        legalMoves++;
+        
+        if (move.flags() == KING_CASTLE || move.flags() == QUEEN_CASTLE || move.get_piece() == ROOK) {
+            print_board();
+        }
+
+
+        restore_from_copy();
+    }
+    std::cout << "Legal moves: " << legalMoves << std::endl;
 
     while (running) {
         if (!std::getline(std::cin, inputLine)) {

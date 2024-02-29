@@ -6,7 +6,7 @@
 #include "types.h"
 #include "bitboard.h"
 #include "board.h"
-#include "movegen.h"\
+#include "movegen.h"
 
 namespace Ecifircas 
 {
