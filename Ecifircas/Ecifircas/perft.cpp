@@ -7,7 +7,7 @@
 
 namespace Ecifircas
 {
-	long Nodes;
+	long long Nodes;
 
 	void perft_driver(int depth)
 	{

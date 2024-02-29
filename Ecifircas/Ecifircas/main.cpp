@@ -41,7 +41,7 @@ int main()
             auto start = std::chrono::high_resolution_clock::now();
 
             Nodes = 0;
-            perft_driver(6);
+            perft_driver(7);
 
             auto end = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
