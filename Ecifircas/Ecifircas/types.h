@@ -112,6 +112,9 @@ namespace Ecifircas {
 	// Took operator inspiration from stockfish
 	class Move
 	{
+	public:
+		Move() : data(0) {}
+
 		Move(Square source, Square dest, Piece piece, Color color, MoveFlags flags)
 		{
 			data = (flags & 0xf) << 16 | (color) << 15 | (piece & 0x3) << 12
