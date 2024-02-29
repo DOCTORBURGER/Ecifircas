@@ -13,13 +13,13 @@ namespace Ecifircas {
 			count = 0;
 		}
 
-		void add_move(Move move)
+		inline void add_move(Move move)
 		{
 			moves[count] = move;
 			count++;
 		}
 
-		void print_moves()
+		inline void print_moves()
 		{
 			std::string output = "";
 			for (int curMoveIndex = 0; curMoveIndex < count; curMoveIndex++) {
