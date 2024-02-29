@@ -85,6 +85,12 @@ namespace Ecifircas {
 		BLACK_QUEENSIDE = 8
 	};
 
+	enum QuiescenceMoveFlag : int
+	{
+		ALL_MOVES = 0,
+		ONLY_CAPTURES = 1
+	};
+
 	enum MoveFlags : int
 	{
 		QUIET_MOVE = 0,
@@ -117,7 +123,7 @@ namespace Ecifircas {
 
 		Move(Square source, Square dest, Piece piece, Color color, MoveFlags flags)
 		{
-			data = (flags & 0xf) << 16 | (color) << 15 | (piece & 0x3) << 12
+			data = (flags & 0xf) << 16 | (color) << 15 | (piece & 0x7) << 12
 				| (dest & 0x3f) << 6 | (source & 0x3f);
 		}
 

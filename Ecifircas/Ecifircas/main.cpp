@@ -13,16 +13,21 @@ int main()
     bool running = true;
     initialize_bitboards();
 
-    set_board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); // "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1"
+    set_board("r3kbnr/ppp2ppp/2n1b3/3pp1q1/3PP1Q1/2N1B3/PPP2PPP/R3KBNR w KQkq - 4 6"); // "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1"
     print_board();
 
-    copy_board();
+    Moves moves;
+    generate_moves(moves);
 
-    set_board("8/8/8/8/8/8/8/8 b - - 0 1");
-    print_board();
+    moves.print_moves();
 
-    restore_from_copy();
-    print_board();
+    for (int i = 0; i < moves.get_count(); i++) {
+        Move move = moves.get_move(i);
+        if (move.flags() == QUEEN_CASTLE) {
+            make_move(moves.get_move(i), ALL_MOVES);
+            print_board();
+        }
+    }
 
     while (running) {
         if (!std::getline(std::cin, inputLine)) {

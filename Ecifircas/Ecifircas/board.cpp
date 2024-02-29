@@ -32,6 +32,99 @@ namespace Ecifircas
         "a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8", "no square"
     };
 
+    const int CastlingRightsSquares[64] = {
+     7, 15, 15, 15,  3, 15, 15, 11,
+    15, 15, 15, 15, 15, 15, 15, 15,
+    15, 15, 15, 15, 15, 15, 15, 15,
+    15, 15, 15, 15, 15, 15, 15, 15,
+    15, 15, 15, 15, 15, 15, 15, 15,
+    15, 15, 15, 15, 15, 15, 15, 15,
+    15, 15, 15, 15, 15, 15, 15, 15,
+    13, 15, 15, 15, 12, 15, 15, 14
+    };
+
+    bool make_move(Move move, QuiescenceMoveFlag quieFlag)
+    {
+        if (quieFlag == ALL_MOVES) {
+            copy_board();
+
+            Square sourceSquare = move.from_sq();
+            Square targetSquare = move.to_sq();
+            Piece piece = move.get_piece();
+            MoveFlags flag = move.flags();
+            const Color oppositeColor = Color(SideToMove ^ 1);
+
+            pop_bit(Pieces[SideToMove][piece], sourceSquare);
+            set_bit(Pieces[SideToMove][piece], targetSquare);
+
+            if (flag & CAPTURE) {
+                for (Piece pieceType = PAWN; pieceType <= KING; pieceType++) {
+                    if (get_bit(Pieces[oppositeColor][pieceType], targetSquare)) {
+                        pop_bit(Pieces[oppositeColor][pieceType], targetSquare);
+                        break;
+                    }
+                }
+            }
+
+            // Promotion
+            if (0x8 & flag) {
+                Piece promotedPiece = Piece(KNIGHT + (flag & 0x3));
+                pop_bit(Pieces[SideToMove][piece], targetSquare);
+                pop_bit(Pieces[SideToMove][promotedPiece], targetSquare);
+            }
+
+            if (flag == EP_CAPTURE) {
+                pop_bit(Pieces[oppositeColor][PAWN], Square(targetSquare + ((SideToMove) ? 8 : -8)));
+            }
+
+            EnpassantSquare = NO_SQUARE;
+
+            if (flag == DOUBLE_PAWN_PUSH) {
+                EnpassantSquare = Square(targetSquare + ((SideToMove) ? 8 : -8));
+            }
+
+            if (flag == KING_CASTLE) {
+                pop_bit(Pieces[SideToMove][ROOK], Square(H1 + ((SideToMove) ? 56 : 0)));
+                set_bit(Pieces[SideToMove][ROOK], Square(F1 + ((SideToMove) ? 56 : 0)));
+            }
+
+            if (flag == QUEEN_CASTLE) {
+                pop_bit(Pieces[SideToMove][ROOK], Square(A1 + ((SideToMove) ? 56 : 0)));
+                set_bit(Pieces[SideToMove][ROOK], Square(D1 + ((SideToMove) ? 56 : 0)));
+            }
+
+            CastleRights &= CastlingRightsSquares[sourceSquare];
+            CastleRights &= CastlingRightsSquares[targetSquare];
+
+            memset(Occupancies, 0, sizeof(Occupancies));
+
+            for (Piece piece = PAWN; piece <= KING; piece++) {
+                Occupancies[WHITE] |= Pieces[WHITE][piece];
+                Occupancies[BLACK] |= Pieces[BLACK][piece];
+            }
+            Occupancies[2] = Occupancies[WHITE] | Occupancies[BLACK];
+
+            
+
+            if (is_square_attacked(Square(get_ls1b_index(Pieces[SideToMove][KING])), oppositeColor)) {
+                restore_from_copy();
+                return false;
+            }
+            else {
+                SideToMove = oppositeColor;
+                return true;
+            }
+        }
+        else {
+            if (move.flags() == CAPTURE) {
+                make_move(move, ALL_MOVES);
+            }
+            else {
+                return false;
+            }
+        }
+    }
+
     std::vector<std::string> split(const std::string& str, char delimiter) 
     {
         std::stringstream ss(str);
@@ -236,7 +329,7 @@ namespace Ecifircas
         std::cout << output << std::endl;
     }
 
-    bool is_square_attacked(Square square, Color attackingSide) {
+    inline bool is_square_attacked(Square square, Color attackingSide) {
         Color oppositeSide = (attackingSide == WHITE) ? BLACK : WHITE;
         return  (pawn_attacks_bb(square, oppositeSide) & Pieces[attackingSide][PAWN])
             | (attacks_bb(square, Occupancies[BOTH], KNIGHT) & Pieces[attackingSide][KNIGHT])

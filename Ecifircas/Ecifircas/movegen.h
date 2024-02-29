@@ -19,12 +19,31 @@ namespace Ecifircas {
 			count++;
 		}
 
+		inline int get_count()
+		{
+			return count;
+		}
+
+		inline Move get_move(int index)
+		{
+			return moves[index];
+		}
+
 		inline void print_moves()
 		{
 			std::string output = "";
 			for (int curMoveIndex = 0; curMoveIndex < count; curMoveIndex++) {
 				Move move = moves[curMoveIndex];
 				output += ("move: " + SquareToCoordinates[move.from_sq()] + SquareToCoordinates[move.to_sq()] + " ");
+
+				Piece piece = move.get_piece();
+
+				output += (piece == PAWN) ? "Pawn " : "";
+				output += (piece == KNIGHT) ? "Knight " : "";
+				output += (piece == BISHOP) ? "Bishop " : "";
+				output += (piece == ROOK) ? "Rook " : "";
+				output += (piece == QUEEN) ? "Queen " : "";
+				output += (piece == KING) ? "King " : "";
 
 				MoveFlags flags = move.flags();
 
