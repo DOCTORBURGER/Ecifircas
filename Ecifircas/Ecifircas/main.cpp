@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <chrono>
 
 #include "board.h"
 #include "bitboard.h"
@@ -15,7 +14,7 @@ int main()
     bool running = true;
     initialize_bitboards();
 
-    set_board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"); // "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1"
+    set_board("rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8"); // "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1"
 
     while (running) {
         if (!std::getline(std::cin, inputLine)) {
@@ -38,16 +37,7 @@ int main()
             print_board();
         }
         else if (inputLine == "perft") {
-            auto start = std::chrono::high_resolution_clock::now();
-
-            Nodes = 0;
-            perft_driver(7);
-
-            auto end = std::chrono::high_resolution_clock::now();
-            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-
-            std::cout << "Nodes: " << Nodes << std::endl;
-            std::cout << "Time taken: " << duration.count() << " milliseconds" << std::endl;
+            perft_test(4);
         }
         else {
 

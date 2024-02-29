@@ -1,4 +1,6 @@
 #include <iostream>
+#include <chrono>
+#include <string>
 
 #include "board.h"
 #include "types.h"
@@ -31,6 +33,53 @@ namespace Ecifircas
 
 			restore_from_copy();
 		}
+	}
+
+	void perft_test(int depth)
+	{
+		Nodes = 0;
+
+		std::cout << "\n    Performance Test\n\n" << std::endl;
+
+		Moves moves;
+
+		generate_moves(moves);
+
+		std::string promoString = "nbrq";
+
+		auto start = std::chrono::high_resolution_clock::now();
+
+		for (int curMoveIndex = 0; curMoveIndex < moves.get_count(); curMoveIndex++) {
+			copy_board();
+
+			if (!make_move(moves.get_move(curMoveIndex), ALL_MOVES)) {
+				continue;
+			}
+
+			//print_board();
+
+			long cummulativeNodes = Nodes;
+
+			perft_driver(depth - 1);
+
+			long oldNodes = Nodes - cummulativeNodes;
+
+			restore_from_copy();
+
+			size_t index = moves.get_move(curMoveIndex).flags() & 0x3;
+			std::string promoChar = (index < promoString.size()) ? std::string(1, promoString[index]) : std::string(1, '\0');
+
+			std::cout << SquareToCoordinates[moves.get_move(curMoveIndex).from_sq()] <<
+				SquareToCoordinates[moves.get_move(curMoveIndex).to_sq()] << 
+				((moves.get_move(curMoveIndex).flags() & 0x8) ? promoChar : "")
+				<< ": " << oldNodes << std::endl;
+		}
+
+		auto end = std::chrono::high_resolution_clock::now();
+		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+
+		std::cout << "Nodes: " << Nodes << std::endl;
+		std::cout << "Time taken: " << duration.count() << " milliseconds" << std::endl;
 	}
 }
 
