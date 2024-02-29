@@ -13,21 +13,30 @@ int main()
     bool running = true;
     initialize_bitboards();
 
-    set_board("r3kbnr/ppp2ppp/2n1b3/3pp1q1/3PP1Q1/2N1B3/PPP2PPP/R3KBNR w KQkq - 4 6"); // "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1"
+    set_board("r6r/p1ppkpb1/b1n1pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQ - 0 2"); // "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1"
     print_board();
 
     Moves moves;
     generate_moves(moves);
-
-    moves.print_moves();
-
+    int legalMoves = 0;
     for (int i = 0; i < moves.get_count(); i++) {
         Move move = moves.get_move(i);
-        if (move.flags() == QUEEN_CASTLE) {
-            make_move(moves.get_move(i), ALL_MOVES);
+
+        copy_board();
+
+        if (!make_move(move, ALL_MOVES)) {
+            continue;
+        }
+        legalMoves++;
+        
+        if (move.flags() == KING_CASTLE || move.flags() == QUEEN_CASTLE || move.get_piece() == ROOK) {
             print_board();
         }
+
+
+        restore_from_copy();
     }
+    std::cout << "Legal moves: " << legalMoves << std::endl;
 
     while (running) {
         if (!std::getline(std::cin, inputLine)) {
