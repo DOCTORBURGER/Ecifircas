@@ -15,7 +15,7 @@ namespace Ecifircas
 	extern const std::string SquareToCoordinates[];
 
 	// Copy / restore board macros
-#define copy_board()																						\
+#define copy_board()																							\
 		Bitboard bitboardsCopy[2][6], occupanciesCopy[3];														\
 		Color sideToMoveCopy;																					\
 		Square enpassantSquareCopy;																				\
@@ -24,7 +24,7 @@ namespace Ecifircas
 		std::memcpy(occupanciesCopy, Occupancies, sizeof(Occupancies));											\
 		sideToMoveCopy = SideToMove, enpassantSquareCopy = EnpassantSquare, castleRightsCopy = CastleRights;	\
 
-#define restore_from_copy()																					\
+#define restore_from_copy()																						\
 		std::memcpy(Pieces, bitboardsCopy, sizeof(bitboardsCopy));												\
 		std::memcpy(Occupancies, occupanciesCopy, sizeof(occupanciesCopy));										\
 		SideToMove = sideToMoveCopy, EnpassantSquare = enpassantSquareCopy, CastleRights = castleRightsCopy;	\
