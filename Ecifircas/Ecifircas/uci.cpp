@@ -41,32 +41,7 @@ namespace Ecifircas {
                 print_board();
             }
             else if (token == "position") {
-                iss >> token;
-
-                if (token == "startpos") {
-                    set_board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
-                    iss >> token;
-                }
-                else if (token == "fen") {
-                    while (iss >> token && token != "moves")
-                        fen += token + " ";
-
-                    size_t endpos = fen.find_last_not_of(" \t");
-                    if (std::string::npos != endpos) {
-                        fen = fen.substr(0, endpos + 1);
-                    }
-
-                    set_board(fen);
-                }
-                else {
-
-                }
-
-                if (token == "moves") {
-                    while (iss >> token) {
-
-                    }
-                }
+                position(iss);
             }
             else if (token == "go") {
                 Moves moves;
@@ -93,6 +68,39 @@ namespace Ecifircas {
         }
 	}
 
+    void UCI::go(std::istringstream& iss) {
+
+    }
+
+    void UCI::position(std::istringstream& iss) {
+        Move        m;
+        std::string token, fen;
+
+        iss >> token;
+
+        if (token == "startpos") {
+            set_board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+            iss >> token;
+        }
+        else if (token == "fen") {
+            while (iss >> token && token != "moves")
+                fen += token + " ";
+
+            size_t endpos = fen.find_last_not_of(" \t");
+            if (std::string::npos != endpos) {
+                fen = fen.substr(0, endpos + 1);
+            }
+
+            set_board(fen);
+        }
+
+        if (token == "moves") {
+            while (iss >> token) {
+
+            }
+        }
+    }
+
 	std::string UCI::square(Square s) {
 
 	}
@@ -101,7 +109,8 @@ namespace Ecifircas {
 
 	}
 
-	Move to_move(std::string& str) {
-
-	}
+    Move UCI::to_move(std::string& str)
+    {
+        return Move();
+    }
 }
