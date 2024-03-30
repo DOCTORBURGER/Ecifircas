@@ -5,8 +5,8 @@
 #include <vector>
 #include <sstream>
 
-#include "board.h"
 #include "types.h"
+#include "board.h"
 #include "bitboard.h"
 
 namespace Ecifircas 

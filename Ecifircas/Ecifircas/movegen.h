@@ -2,6 +2,7 @@
 
 
 #include "types.h"
+#include "board.h"
 #include <string>
 
 namespace Ecifircas {

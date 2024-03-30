@@ -4,9 +4,9 @@
 #include <random>
 
 #include "types.h"
+#include "movegen.h"
 #include "board.h"
 #include "bitboard.h"
-#include "movegen.h"
 #include "perft.h"
 
 using namespace Ecifircas;
