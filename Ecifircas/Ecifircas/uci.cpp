@@ -10,6 +10,7 @@
 #include "perft.h"
 
 namespace Ecifircas {
+
 	void UCI::loop() {
 		std::string inputLine;
 		bool running = true;
@@ -96,21 +97,39 @@ namespace Ecifircas {
 
         if (token == "moves") {
             while (iss >> token) {
-
+                Move move = to_move(token);
+                if (move.from_sq() != A1 && move.to_sq() != A1) {
+                    make_move(move, ALL_MOVES);
+                }
             }
         }
     }
 
-	std::string UCI::square(Square s) {
-
-	}
-
 	std::string UCI::move(Move m) {
+        std::string move = SquareToCoordinates[m.from_sq()] + SquareToCoordinates[m.to_sq()];
 
+        MoveFlags flag = m.flags();
+
+        if (0x8 & flag) { // Promotion Check
+            Piece promotedPiece = Piece(KNIGHT + (flag & 0x3));
+            move += "pnbrq"[promotedPiece];
+        }
+
+        return move;
 	}
 
     Move UCI::to_move(std::string& str)
     {
-        return Move();
+        Moves moves;
+        generate_moves(moves);
+        
+        for (int i = 0; i < moves.get_count(); i++) {
+            std::string moveStr = move(moves.get_move(i));
+            if (str == moveStr) {
+                return moves.get_move(i);
+            }
+        }
+
+        return Move(NO_SQUARE, NO_SQUARE, PAWN, WHITE, QUIET_MOVE);
     }
 }
