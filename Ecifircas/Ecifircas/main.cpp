@@ -1,47 +1,17 @@
 #include <iostream>
-#include <string>
 
-#include "board.h"
 #include "bitboard.h"
-#include "perft.h"
+#include "uci.h"
 
 using namespace Ecifircas;
 
 int main()
 {
-    std::string inputLine;
-    bool running = true;
     initialize_bitboards();
 
-    set_board("rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8");
+    UCI uci;
 
-    while (running) {
-        if (!std::getline(std::cin, inputLine)) {
-            break; 
-        }
-
-        if (inputLine == "uci") {
-            std::cout << "id name Ecifircas" << std::endl;
-            std::cout << "id author Jonah Bogusch" << std::endl;
-
-            std::cout << "uciok" << std::endl;
-        }
-        else if (inputLine == "isready") {
-            std::cout << "readyok" << std::endl;
-        }
-        else if (inputLine == "quit") {
-            running = false;
-        }
-        else if (inputLine == "d") {
-            print_board();
-        }
-        else if (inputLine == "perft") {
-            perft_test(6);
-        }
-        else {
-
-        }
-    }
+    uci.loop();
 
     return 0;
 }

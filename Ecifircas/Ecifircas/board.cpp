@@ -104,8 +104,6 @@ namespace Ecifircas
             }
             Occupancies[2] = Occupancies[WHITE] | Occupancies[BLACK];
 
-            
-
             if (is_square_attacked(Square(get_ls1b_index(Pieces[SideToMove][KING])), oppositeColor)) {
                 restore_from_copy();
                 return false;
@@ -209,6 +207,12 @@ namespace Ecifircas
         }
 
         memset(Pieces, 0, sizeof(Pieces));
+        memset(Occupancies, 0, sizeof(Occupancies));
+
+        CastleRights = 15;
+        SideToMove = WHITE;
+        EnpassantSquare = NO_SQUARE;
+
 
         std::vector<std::string> fenParts = split(fen, ' ');
 
