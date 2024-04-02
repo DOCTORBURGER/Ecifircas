@@ -8,6 +8,7 @@
 #include "movegen.h"
 #include "board.h"
 #include "perft.h"
+#include "search.h"
 
 namespace Ecifircas {
 
@@ -45,14 +46,7 @@ namespace Ecifircas {
                 position(iss);
             }
             else if (token == "go") {
-                Moves moves;
-                generate_moves(moves);
-                moves.get_move(0);
-                std::string promoString = "nbrq";
-                size_t index = moves.get_move(0).flags() & 0x3;
-                std::string promoChar = (index < promoString.size()) ? std::string(1, promoString[index]) : std::string(1, '\0');
-                std::cout << "bestmove " << SquareToCoordinates[moves.get_move(0).from_sq()] <<
-                    SquareToCoordinates[moves.get_move(0).to_sq()] << std::endl;
+                std::cout << "bestmove " << move(search_placeholder()) << std::endl;
             }
             else if (token == "perft") {
                 int depth;
@@ -97,8 +91,9 @@ namespace Ecifircas {
 
         if (token == "moves") {
             while (iss >> token) {
+                std::string t = token;
                 Move move = to_move(token);
-                if (move.from_sq() != A1 && move.to_sq() != A1) {
+                if (!(move.from_sq() == A1 && move.to_sq() == A1)) {
                     make_move(move, ALL_MOVES);
                 }
             }
