@@ -4,6 +4,7 @@
 #include "movegen.h"
 #include "board.h"
 #include "eval.h"
+#include "bitboard.h"
 
 namespace Ecifircas {
 	int Ply = 0; // half move (ie. player move)
@@ -15,6 +16,8 @@ namespace Ecifircas {
 		if (depth == 0) {
 			return evaluate();
 		}
+
+		int legalMoves = 0;
 
 		Move bestSoFar;
 
@@ -34,6 +37,8 @@ namespace Ecifircas {
 				Ply--;
 				continue;
 			}
+
+			legalMoves++;
 
 			int score = -negamax(-beta, -alpha, depth - 1);
 
@@ -55,6 +60,15 @@ namespace Ecifircas {
 			}
 		}
 
+		if (legalMoves == 0) {
+			if (is_square_attacked(Square(get_ls1b_index(Pieces[SideToMove][KING])), Color(SideToMove ^ 1))) {
+				return -49000 + Ply;
+			}
+			else {
+				return 0;
+			}
+		}
+
 		if (oldAlpha != alpha)
 			BestMove = bestSoFar;
 
@@ -63,7 +77,7 @@ namespace Ecifircas {
 
 	Move search()
 	{
-		int score = negamax(-50000, 50000, 3);
+		int score = negamax(-50000, 50000, 5);
 
 		return BestMove;
 	}
