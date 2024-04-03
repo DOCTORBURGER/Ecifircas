@@ -41,28 +41,21 @@ namespace Ecifircas {
 
 			restore_from_copy();
 
-			// fail-hard beta cutoff
 			if (score >= beta)
 			{
-				// node (move) fails high
 				return beta;
 			}
 
-			// found a better move
 			if (score > alpha)
 			{
-				// PV node (move)
 				alpha = score;
 
-				// if root move
 				if (Ply == 0)
-					// associate best move with the best score
 					bestSoFar = move;
 			}
 		}
 
 		if (oldAlpha != alpha)
-			// init best move
 			BestMove = bestSoFar;
 
 		return alpha;
@@ -70,7 +63,7 @@ namespace Ecifircas {
 
 	Move search()
 	{
-		int score = negamax(-50000, 50000, 5);
+		int score = negamax(-50000, 50000, 3);
 
 		return BestMove;
 	}
