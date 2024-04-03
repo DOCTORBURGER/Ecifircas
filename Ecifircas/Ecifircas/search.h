@@ -3,5 +3,5 @@
 #include "types.h"
 
 namespace Ecifircas {
-	Move search_placeholder();
+	Move search();
 }

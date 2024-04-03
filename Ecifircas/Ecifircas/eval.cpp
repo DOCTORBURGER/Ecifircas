@@ -129,6 +129,6 @@ namespace Ecifircas {
 			}
 		}
 
-		return score;
+		return (SideToMove == WHITE) ? score : -score;
 	}
 }
