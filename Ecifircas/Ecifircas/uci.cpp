@@ -9,6 +9,7 @@
 #include "board.h"
 #include "perft.h"
 #include "search.h"
+#include "eval.h"
 
 namespace Ecifircas {
 
@@ -41,6 +42,7 @@ namespace Ecifircas {
             }
             else if (token == "d") {
                 print_board();
+                std::cout << evaluate() << std::endl;
             }
             else if (token == "position") {
                 position(iss);

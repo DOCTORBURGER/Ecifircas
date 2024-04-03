@@ -80,6 +80,7 @@ namespace Ecifircas
 
 		std::cout << "Nodes: " << Nodes << std::endl;
 		std::cout << "Time taken: " << duration.count() << " milliseconds" << std::endl;
+		std::cout << "Nodes/s: " << Nodes / (duration.count() / 1000) << std::endl;
 	}
 }
 
