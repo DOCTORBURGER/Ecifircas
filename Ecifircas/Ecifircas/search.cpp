@@ -20,14 +20,35 @@ namespace Ecifircas {
         {100, 200, 300, 400, 500, 600 }
     };
 
+	int score_move(Move move)
+	{
+		if (move.flags() & CAPTURE) {
+			Piece targetPiece = PAWN; // set to pawn to have default behavior for EP 
+
+			for (Piece piece = PAWN; piece <= KING; piece++) {
+				if (get_bit(Pieces[!SideToMove][piece], move.to_sq())) {
+					targetPiece = piece;
+					break;
+				}
+			}
+
+			return AttackerTable[move.get_piece()][targetPiece];
+		}
+		else {
+
+		}
+
+		return 0;
+	}
+
 	int quiescence(int alpha, int beta)
 	{
-		int stand_pat = evaluate();
+		int standPat = evaluate();
 
-		if (stand_pat >= beta)
+		if (standPat >= beta)
 			return beta;
-		if (alpha < stand_pat)
-			alpha = stand_pat;
+		if (alpha < standPat)
+			alpha = standPat;
 
 		Moves moves;
 		generate_moves(moves);
