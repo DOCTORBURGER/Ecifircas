@@ -30,6 +30,14 @@ namespace Ecifircas {
 		{
 			return moves[index];
 		}
+
+		inline void swap(int i, int j)
+		{
+			Move temp = moves[i];
+			moves[i] = moves[j];
+			moves[j] = temp;
+		}
+
 	protected:
 		Move moves[256];
 		int count;

@@ -26,7 +26,7 @@ namespace Ecifircas {
 			Piece targetPiece = PAWN; // set to pawn to have default behavior for EP 
 
 			for (Piece piece = PAWN; piece <= KING; piece++) {
-				if (get_bit(Pieces[!SideToMove][piece], move.to_sq())) {
+				if (get_bit(Pieces[SideToMove ^ 1][piece], move.to_sq())) {
 					targetPiece = piece;
 					break;
 				}
