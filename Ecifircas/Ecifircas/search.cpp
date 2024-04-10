@@ -1,5 +1,7 @@
 #include "search.h"
 
+#include <vector>
+
 #include "types.h"
 #include "movegen.h"
 #include "board.h"
@@ -39,6 +41,26 @@ namespace Ecifircas {
 		}
 
 		return 0;
+	}
+
+	void sort_moves(Moves moves)
+	{
+		std::vector<int> moveScores(moves.get_count());
+
+		for (int moveIndex = 0; moveIndex < moves.get_count(); moveIndex++) 
+			moveScores[moveIndex] = score_move(moves.get_move(moveIndex));
+
+		for (int currentMove = 0; currentMove < moves.get_count(); currentMove++) {
+			for (int nextMove = 1; nextMove < moves.get_count(); currentMove++) {
+				if (moveScores[currentMove] < moveScores[nextMove]) {
+					int tempScore = moveScores[currentMove];
+					moveScores[currentMove] = moveScores[nextMove];
+					moveScores[nextMove] = tempScore;
+
+					moves.swap(currentMove, nextMove);
+				}
+			}
+		}
 	}
 
 	int quiescence(int alpha, int beta)
@@ -147,7 +169,7 @@ namespace Ecifircas {
 
 	Move search()
 	{
-		int score = negamax(-50000, 50000, 3);
+		int score = negamax(-50000, 50000, 4);
 
 		return BestMove;
 	}
