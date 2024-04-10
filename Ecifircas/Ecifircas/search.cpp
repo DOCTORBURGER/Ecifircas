@@ -11,10 +11,50 @@ namespace Ecifircas {
 
 	Move BestMove;
 
+	int quiescence(int alpha, int beta)
+	{
+		int stand_pat = evaluate();
+
+		if (stand_pat >= beta)
+			return beta;
+		if (alpha < stand_pat)
+			alpha = stand_pat;
+
+		Moves moves;
+		generate_moves(moves);
+
+		for (int i = 0; i < moves.get_count(); i++) {
+			Move move = moves.get_move(i);
+			copy_board();
+
+			Ply++;
+
+			if (make_move(move, ONLY_CAPTURES) == false) {
+				Ply--;
+				continue;
+			}
+
+			int score = -quiescence(-beta, -alpha);
+
+			Ply--;
+
+			restore_from_copy();
+
+			if (score >= beta) {
+				return beta;
+			}
+			if (score > alpha) {
+				score = alpha;
+			}
+		}
+
+		return alpha;
+	}
+
 	int negamax(int alpha, int beta, int depth)
 	{
 		if (depth == 0) {
-			return evaluate();
+			return quiescence(alpha, beta);
 		}
 
 		int legalMoves = 0;
@@ -77,7 +117,7 @@ namespace Ecifircas {
 
 	Move search()
 	{
-		int score = negamax(-50000, 50000, 5);
+		int score = negamax(-50000, 50000, 3);
 
 		return BestMove;
 	}
