@@ -1,5 +1,7 @@
 #include "search.h"
 
+#include <vector>
+
 #include "types.h"
 #include "movegen.h"
 #include "board.h"
@@ -11,17 +13,73 @@ namespace Ecifircas {
 
 	Move BestMove;
 
+	int AttackerTable[6][6] = {
+        {105, 205, 305, 405, 505, 605 },
+        {104, 204, 304, 404, 504, 604 },
+        {103, 203, 303, 403, 503, 603 },
+        {102, 202, 302, 402, 502, 602 },
+        {101, 201, 301, 401, 501, 601 },
+        {100, 200, 300, 400, 500, 600 }
+    };
+
+	int SearchNodes;
+
+	int score_move(Move move)
+	{
+		if (move.flags() & CAPTURE) {
+			Piece targetPiece = PAWN; // set to pawn to have default behavior for EP 
+
+			for (Piece piece = PAWN; piece <= KING; piece++) {
+				if (get_bit(Pieces[SideToMove ^ 1][piece], move.to_sq())) {
+					targetPiece = piece;
+					break;
+				}
+			}
+
+			return AttackerTable[move.get_piece()][targetPiece];
+		}
+		else {
+
+		}
+
+		return 0;
+	}
+
+	void sort_moves(Moves& moves)
+	{
+		std::vector<int> moveScores(moves.get_count());
+
+		for (int moveIndex = 0; moveIndex < moves.get_count(); moveIndex++) 
+			moveScores[moveIndex] = score_move(moves.get_move(moveIndex));
+
+		for (int currentMove = 0; currentMove < moves.get_count(); currentMove++) {
+			for (int nextMove = currentMove + 1; nextMove < moves.get_count(); nextMove++) {
+				if (moveScores[currentMove] < moveScores[nextMove]) {
+					int tempScore = moveScores[currentMove];
+					moveScores[currentMove] = moveScores[nextMove];
+					moveScores[nextMove] = tempScore;
+
+					moves.swap(currentMove, nextMove);
+				}
+			}
+		}
+	}
+
 	int quiescence(int alpha, int beta)
 	{
-		int stand_pat = evaluate();
+		SearchNodes++;
 
-		if (stand_pat >= beta)
+		int standPat = evaluate();
+
+		if (standPat >= beta)
 			return beta;
-		if (alpha < stand_pat)
-			alpha = stand_pat;
+		if (alpha < standPat)
+			alpha = standPat;
 
 		Moves moves;
 		generate_moves(moves);
+
+		sort_moves(moves);
 
 		for (int i = 0; i < moves.get_count(); i++) {
 			Move move = moves.get_move(i);
@@ -49,6 +107,7 @@ namespace Ecifircas {
 		}
 
 		return alpha;
+
 	}
 
 	int negamax(int alpha, int beta, int depth)
@@ -57,6 +116,8 @@ namespace Ecifircas {
 			return quiescence(alpha, beta);
 		}
 
+		SearchNodes++;
+
 		int legalMoves = 0;
 
 		Move bestSoFar;
@@ -64,8 +125,9 @@ namespace Ecifircas {
 		int oldAlpha = alpha;
 
 		Moves moves;
-
 		generate_moves(moves);
+
+		sort_moves(moves);
 
 		for (int i = 0; i < moves.get_count(); i++) {
 			Move move = moves.get_move(i);
@@ -117,7 +179,9 @@ namespace Ecifircas {
 
 	Move search()
 	{
-		int score = negamax(-50000, 50000, 3);
+		SearchNodes = 0;
+		int score = negamax(-50000, 50000, 5);
+		//std::cout << "Search nodes: " << SearchNodes << std::endl;
 
 		return BestMove;
 	}
