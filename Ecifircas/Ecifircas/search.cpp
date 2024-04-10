@@ -3,22 +3,82 @@
 #include "types.h"
 #include "movegen.h"
 #include "board.h"
+#include "eval.h"
+#include "bitboard.h"
 
 namespace Ecifircas {
-	Move search_placeholder() {
+	int Ply = 0; // half move (ie. player move)
+
+	Move BestMove;
+
+	int negamax(int alpha, int beta, int depth)
+	{
+		if (depth == 0) {
+			return evaluate();
+		}
+
+		int legalMoves = 0;
+
+		Move bestSoFar;
+
+		int oldAlpha = alpha;
+
 		Moves moves;
-		Move selectedMove;
 
 		generate_moves(moves);
 
 		for (int i = 0; i < moves.get_count(); i++) {
-			selectedMove = moves.get_move(i);
+			Move move = moves.get_move(i);
+			copy_board();
 
-			if (make_move(selectedMove, ALL_MOVES)) {
-				break;
+			Ply++;
+
+			if (make_move(move, ALL_MOVES) == false) {
+				Ply--;
+				continue;
+			}
+
+			legalMoves++;
+
+			int score = -negamax(-beta, -alpha, depth - 1);
+
+			Ply--;
+
+			restore_from_copy();
+
+			if (score >= beta)
+			{
+				return beta;
+			}
+
+			if (score > alpha)
+			{
+				alpha = score;
+
+				if (Ply == 0)
+					bestSoFar = move;
 			}
 		}
-		
-		return selectedMove;
+
+		if (legalMoves == 0) {
+			if (is_square_attacked(Square(get_ls1b_index(Pieces[SideToMove][KING])), Color(SideToMove ^ 1))) {
+				return -49000 + Ply;
+			}
+			else {
+				return 0;
+			}
+		}
+
+		if (oldAlpha != alpha)
+			BestMove = bestSoFar;
+
+		return alpha;
+	}
+
+	Move search()
+	{
+		int score = negamax(-50000, 50000, 5);
+
+		return BestMove;
 	}
 }

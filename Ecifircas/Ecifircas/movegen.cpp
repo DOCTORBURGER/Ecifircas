@@ -207,7 +207,7 @@ namespace Ecifircas
 					if (CastleRights & BLACK_QUEENSIDE) {
 						if (get_bit(emptySquares, D8) && get_bit(emptySquares, C8) && get_bit(emptySquares, B8)) {
 							if (!is_square_attacked(E8, WHITE) && !is_square_attacked(D8, WHITE)) {
-								moveList.add_move(Move(E8, C8, piece, SideToMove, KING_CASTLE));
+								moveList.add_move(Move(E8, C8, piece, SideToMove, QUEEN_CASTLE));
 							}
 						}
 					}

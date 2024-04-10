@@ -48,7 +48,7 @@ namespace Ecifircas {
                 position(iss);
             }
             else if (token == "go") {
-                std::cout << "bestmove " << move(search_placeholder()) << std::endl;
+                std::cout << "bestmove " << move(search()) << std::endl;
             }
             else if (token == "perft") {
                 int depth;
