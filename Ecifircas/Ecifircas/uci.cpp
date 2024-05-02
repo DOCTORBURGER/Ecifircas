@@ -42,7 +42,7 @@ namespace Ecifircas {
             }
             else if (token == "d") {
                 print_board();
-                std::cout << evaluate() << std::endl;
+                std::cout << "    " << "Side eval:     " << evaluate() << std::endl;
             }
             else if (token == "position") {
                 position(iss);
