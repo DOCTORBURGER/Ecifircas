@@ -21,4 +21,4 @@ I will also include the `.exe` in my release.
 
 **HOW TO USE:**
 
-This project follows uci protocol, so to use it you just need to point a chess UI that expects and engine to the .exe file. For testing this project I used Arena chess UI.
+This project follows uci protocol, so to use it you just need to point a chess UI that expects an engine to the .exe file. For testing this project I used Arena chess UI.
