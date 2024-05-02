@@ -53,11 +53,14 @@ namespace Ecifircas {
             else if (token == "perft") {
                 int depth;
                 if (iss >> depth) {
-                    perft_test(depth);
+                    perft_test(depth, true);
                 }
                 else {
                     std::cout << "Error: 'perft' command requires a depth argument." << std::endl;
                 }
+            }
+            else if (token == "suite") {
+                perft_test_suite();
             }
             else {
 
