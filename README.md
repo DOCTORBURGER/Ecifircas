@@ -18,3 +18,7 @@ Currently, I'm working on this as a Visual Studio 2022 project, so the best way 
 The executable will be in `Ecifircas/x64/Release/Ecifircas.exe`.
 
 I will also include the `.exe` in my release.
+
+**HOW TO USE:**
+
+This project follows uci protocol, so to use it you just need to point a chess UI that expects and engine to the .exe file. For testing this project I used Arena chess UI.
