@@ -10,3 +10,11 @@ Here is a list of some sources I have taken inspiration from:
 Helpful tools:
 - [Bitboard Viewer](https://tearth.dev/bitboard-viewer/)
 - [Arena Chess GUI (best free GUI I found for debugging)](http://www.playwitharena.de/)
+
+**HOW TO COMPILE:**
+
+Currently, I'm working on this as a Visual Studio 2022 project, so the best way to compile and run this project would be to open in Visual Studio and compile that way. 
+
+The executable will be in `Ecifircas/x64/Release/Ecifircas.exe`.
+
+I will also include the `.exe` in my release.
