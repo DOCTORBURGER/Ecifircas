@@ -8,7 +8,7 @@ using namespace Ecifircas;
 int main()
 {
     initialize_bitboards();
-
+    
     UCI uci;
 
     uci.loop();

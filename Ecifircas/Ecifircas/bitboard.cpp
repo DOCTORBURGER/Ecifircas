@@ -33,12 +33,12 @@ namespace Ecifircas {
 	};
 
     // to mask relevant squares of both lines (no outer squares)
-    U64 BishopMasks[64];
-    U64 RookMasks[64];
+    Bitboard BishopMasks[64];
+    Bitboard RookMasks[64];
 
     // [square][occupancy]
-    U64 BishopAttacks[64][512];
-    U64 RookAttacks[64][4096];
+    Bitboard BishopAttacks[64][512];
+    Bitboard RookAttacks[64][4096];
 
     // magic 64-bit factor
     // Took inspiration and magics from this approach: https://github.com/maksimKorzh/chess_programming/blob/master/src/magics/magics.c
@@ -110,7 +110,7 @@ namespace Ecifircas {
         0x40102000a0a60140ULL,
     };
 
-    const U64 RookMagics[64] = {
+    const Bitboard RookMagics[64] = {
         0xa8002c000108020ULL,
         0x6c00049b0002001ULL,
         0x100200010090040ULL,
