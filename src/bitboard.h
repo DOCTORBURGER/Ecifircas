@@ -71,12 +71,12 @@ namespace Ecifircas {
 										: 0;
 	}
 
-	constexpr Bitboard pawn_attacks_bb(Bitboard bb, Color c) {
+	inline Bitboard pawn_attacks_bb(Bitboard bb, Color c) {
 		return	c == WHITE	? shift_bit(bb, NORTH_WEST) | shift_bit(bb, NORTH_EAST)
 							: shift_bit(bb, SOUTH_WEST) | shift_bit(bb, SOUTH_EAST);
 	}
 
-	constexpr Bitboard pawn_attacks_bb(Square square, Color c) {
+	inline Bitboard pawn_attacks_bb(Square square, Color c) {
 		return PawnAttacks[c][square];
 	}
 

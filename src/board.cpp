@@ -115,7 +115,7 @@ namespace Ecifircas
         }
         else {
             if (move.flags() == CAPTURE) {
-                make_move(move, ALL_MOVES);
+                return make_move(move, ALL_MOVES);
             }
             else {
                 return false;
@@ -333,7 +333,7 @@ namespace Ecifircas
         std::cout << output << std::endl;
     }
 
-    inline bool is_square_attacked(Square square, Color attackingSide) {
+    bool is_square_attacked(Square square, Color attackingSide) {
         Color oppositeSide = (attackingSide == WHITE) ? BLACK : WHITE;
         return  (pawn_attacks_bb(square, oppositeSide) & Pieces[attackingSide][PAWN])
             | (attacks_bb(square, Occupancies[BOTH], KNIGHT) & Pieces[attackingSide][KNIGHT])

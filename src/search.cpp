@@ -47,7 +47,8 @@ namespace Ecifircas {
 
 	void sort_moves(Moves& moves)
 	{
-		std::vector<int> moveScores(moves.get_count());
+		int moveCount = moves.get_count();
+		std::vector<int> moveScores(moveCount);
 
 		for (int moveIndex = 0; moveIndex < moves.get_count(); moveIndex++) 
 			moveScores[moveIndex] = score_move(moves.get_move(moveIndex));

@@ -1,0 +1,3 @@
+/home/jonah/src/Ecifircas/build/CMakeFiles/Ecifircas.dir
+/home/jonah/src/Ecifircas/build/CMakeFiles/edit_cache.dir
+/home/jonah/src/Ecifircas/build/CMakeFiles/rebuild_cache.dir
